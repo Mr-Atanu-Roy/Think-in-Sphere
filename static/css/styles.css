@@ -65,4 +65,12 @@ header .nav-links:hover {
           box-shadow: inset 0 45px 0 -50px #1e1e2f;
   color: #1e1e2f;
 }
+
+#home #hero-img-container {
+  width: 50%;
+}
+
+#home #hero-img-container img {
+  width: 100%;
+}
 /*# sourceMappingURL=styles.css.map */
