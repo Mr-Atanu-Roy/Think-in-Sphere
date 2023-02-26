@@ -1,0 +1,68 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500;700&display=swap");
+.f-light {
+  font-family: "Roboto Slab", serif;
+  font-weight: 400;
+}
+
+.f-medium, header .nav-links {
+  font-family: "Roboto Slab", serif;
+  font-weight: 500;
+}
+
+.f-bold, .btn-1 {
+  font-family: "Roboto Slab", serif;
+  font-weight: 700;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+header {
+  -webkit-box-shadow: rgba(17, 12, 46, 0.15) 0px 25px 60px 0px;
+          box-shadow: rgba(17, 12, 46, 0.15) 0px 25px 60px 0px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  left: 0;
+}
+
+header .nav-links {
+  display: inline-block;
+  -webkit-box-shadow: inset 0 0 0 0 #97c680;
+          box-shadow: inset 0 0 0 0 #97c680;
+  color: #1e1e2f;
+  text-align: center;
+  text-decoration: none;
+  -webkit-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+}
+
+header .nav-links:hover {
+  -webkit-box-shadow: inset 0 -9px 0 0 #97c680;
+          box-shadow: inset 0 -9px 0 0 #97c680;
+}
+
+.btn-1 {
+  color: white;
+  min-width: 160px;
+  padding: 10px 30px;
+  border-radius: 100px;
+  background-color: #97c680;
+  -webkit-box-shadow: inset 0 45px 0 -4.5px #1e1e2f;
+          box-shadow: inset 0 45px 0 -4.5px #1e1e2f;
+  text-align: center;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-1:hover {
+  -webkit-box-shadow: inset 0 45px 0 -50px #1e1e2f;
+          box-shadow: inset 0 45px 0 -50px #1e1e2f;
+  color: #1e1e2f;
+}
+/*# sourceMappingURL=styles.css.map */

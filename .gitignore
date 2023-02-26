@@ -1,0 +1,7 @@
+/env
+*/media
+*__pycache__
+db.sqlite3
+.env
+*tailwind.config.js
+*.css.map
