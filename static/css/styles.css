@@ -4,7 +4,7 @@
   font-weight: 400;
 }
 
-.f-medium, header .nav-links {
+.f-medium, header .nav-links, .btn-2, form input {
   font-family: "Roboto Slab", serif;
   font-weight: 500;
 }
@@ -23,8 +23,9 @@
 }
 
 header {
-  -webkit-box-shadow: rgba(17, 12, 46, 0.15) 0px 25px 60px 0px;
-          box-shadow: rgba(17, 12, 46, 0.15) 0px 25px 60px 0px;
+  background-color: white;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   position: -webkit-sticky;
   position: sticky;
   top: 0;
@@ -66,11 +67,35 @@ header .nav-links:hover {
   color: #1e1e2f;
 }
 
+.btn-2 {
+  text-transform: uppercase;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 8px;
+  text-align: center;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  background-color: #1e1e2f !important;
+}
+
+.btn-2:hover {
+  color: black;
+  background-color: #97c680 !important;
+}
+
 #home #hero-img-container {
   width: 50%;
 }
 
 #home #hero-img-container img {
   width: 100%;
+}
+
+form input {
+  background: none;
+}
+
+form input:focus {
+  border: 2px solid #97c680;
 }
 /*# sourceMappingURL=styles.css.map */

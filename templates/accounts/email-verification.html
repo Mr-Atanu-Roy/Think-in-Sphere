@@ -1,0 +1,81 @@
+{% extends '../blocks/base.html' %}
+
+{% block title %}Verify Your Email | ThinkInSphere{% endblock title %}
+
+
+{% block body %}
+
+<section id="email-verify">
+
+    <div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
+        <div class="relative py-3 sm:max-w-xl sm:mx-auto">
+            <div class="relative px-4 py-10 bg-white mx-8 md:mx-0 shadow-lg rounded-3xl sm:p-12">
+                <div class="max-w-md mx-auto">
+                    <div class="flex items-center space-x-5">
+                        <div
+                            class="h-14 w-14 bg-yellow-200 rounded-full flex flex-shrink-0 justify-center items-center text-yellow-600 text-2xl font-mono">
+                            <i class="fa fa-envelope"></i>
+                        </div>
+                        <div class="block pl-2 text-xl self-start text-gray-700">
+                            <h2 class="leading-relaxed f-medium text-2xl">Verify Your Email</h2>
+                            <h2 class="leading-relaxed f-light text-lg">OTP will to your email</h2>
+                        </div>
+                    </div>
+                    <form method="post" action="" class="divide-y divide-gray-200 f-light">
+                        {% csrf_token %}
+                        
+                        {% if messages %}
+
+                        {% for message in messages %}
+                        <div class="{% if message.tags %}{{message.tags}}{% endif %} px-4 py-3 my-3 rounded relative"
+                            role="alert">
+                            <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                            <span class="block sm:inline">{{message}}</span>
+                        </div>
+                        {% endfor %}
+
+                        {% endif %}
+                        <div class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
+
+                            <div class="grid grid-cols-1">
+                                <div class="flex flex-col">
+                                    <label class="leading-loose">Email</label>
+                                    <input type="email"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none"
+                                        placeholder="example@example.com" name="email" value="{{email}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-4 flex items-center space-x-4">
+                            <button type="submit" name="send-otp" class="btn-2 w-full">
+                                Send OTP
+                            </button>
+                        </div>
+                    </form>
+                    <form method="post" action="" class="divide-y divide-gray-200 f-light">
+                        {% csrf_token %}
+                        
+                        <div class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
+
+                            <div class="grid grid-cols-1">
+                                <div class="flex flex-col">
+                                    <label class="leading-loose">OTP</label>
+                                    <input type="otp"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none"
+                                        placeholder="check your email for otp" name="otp" value="{{otp}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-4 flex items-center space-x-4">
+                            <button type="submit" name="verify-email" class="btn-2 w-full">
+                                Verify email
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock body %}

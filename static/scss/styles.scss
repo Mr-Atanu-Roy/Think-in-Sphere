@@ -23,7 +23,8 @@ $primary-col: #97c680;
 }
 
 header {
-  box-shadow: rgba(17, 12, 46, 0.15) 0px 25px 60px 0px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   position: sticky;
   top: 0;
   left: 0;
@@ -57,6 +58,21 @@ header {
   }
 }
 
+.btn-2 {
+  @extend .f-medium;
+  text-transform: uppercase;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 8px;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+  background-color: #1e1e2f !important;
+  &:hover {
+    color: black;
+   background-color: $primary-col !important;
+  }
+}
+
 
 #home{
     #hero-img-container{
@@ -65,4 +81,14 @@ header {
             width: 100%;
         }
     }
+}
+
+form{
+  input{
+    background: none;
+    @extend .f-medium;
+    &:focus{
+      border: 2px solid $primary-col;
+    }
+  }
 }
