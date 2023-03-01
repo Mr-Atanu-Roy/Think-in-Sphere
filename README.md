@@ -93,7 +93,7 @@ To run the project in your localserver
 ## Authors
 
 - [@Atanu Roy](https://github.com/Mr-Atanu-Roy)
-- [@Rickey](https://github.com/Ricky2054)
+- [@Ricky](https://github.com/Ricky2054)
 - [@Sagarika](https://github.com/Sagarika-02)
 - [@Sayanika](https://github.com/Sayanika19)
 
