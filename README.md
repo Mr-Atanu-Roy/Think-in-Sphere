@@ -42,7 +42,6 @@ For the OPENAI_API_KEY go to OpenAi's webiste : https://openai.com/api/ from the
 `EMAIL_HOST_PASSWORD = 'its app password' `
 
 Note : You have to create app password for the email you are using in `EMAIL_HOST_USER` and put it in `EMAIL_HOST_PASSWORD`
-
 ## Installation
 
 Create a folder and open terminal and install this project by
@@ -96,5 +95,5 @@ To run the project in your localserver
 - [@Atanu Roy](https://github.com/Mr-Atanu-Roy)
 - [@Rickey](https://github.com/Ricky2054)
 - [@Sagarika](https://github.com/Sagarika-02)
-- [@Sayanika](https://github.com/Sagarika-02)
+- [@Sayanika](https://github.com/Sayanika19)
 
