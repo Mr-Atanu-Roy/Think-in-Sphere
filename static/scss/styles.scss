@@ -63,6 +63,21 @@ header {
   }
 }
 
+.btn-2 {
+  @extend .f-medium;
+  text-transform: uppercase;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 8px;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+  background-color: #1e1e2f !important;
+  &:hover {
+    color: black;
+   background-color: $primary-col !important;
+  }
+}
+
 .square_btn {
   @extend .f-bold;
   text-transform: uppercase;
@@ -89,5 +104,15 @@ header {
     color: white;
     border-color: $primary-col;
     background: none;
+  }
+}
+
+form{
+  input{
+    background: none;
+    @extend .f-medium;
+    &:focus{
+      border: 2px solid $primary-col;
+    }
   }
 }

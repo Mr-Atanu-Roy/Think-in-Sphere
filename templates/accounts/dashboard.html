@@ -1,0 +1,139 @@
+{% extends '../blocks/base.html' %}
+
+{% block title %} {{user.first_name}} Dashboard | ThinkInSphere{% endblock title %}
+
+
+{% block body %}
+
+<section id="dashboard">
+    <div class="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
+        <div class="container max-w-screen-lg mx-auto">
+            <div class="my-3">
+                <div class="bg-white rounded-lg shadow-lg p-4 px-4 md:p-8 mb-6">
+                    <div class="flex items-center space-x-5">
+                        <div
+                            class="h-14 w-14 bg-yellow-200 rounded-full flex flex-shrink-0 justify-center items-center text-yellow-600 text-2xl font-mono">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="block pl-2 self-start text-gray-700">
+                            <p class="font-medium text-xl f-bold">Personal Details</p>
+                            <p class="f-light text-lg">You can edit them anytime. We don't share your data with anyone
+                            </p>
+                        </div>
+                    </div>
+
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="text-gray-600 mb-2 mt-12">
+                            <p class="font-medium text-lg f-bold">Email - {{user.email}}
+                            </p>
+                            <p class="font-medium text-lg f-bold">Email Verified -
+                                {% if user.is_verified %}
+                                <i class="fa fa-check text-green-700 mx-1.5"></i>
+                                {% else %}
+                                <i class="fa fa-times text-red-700 mx-1.5"></i> <a href="{% url 'email-verification' %}"
+                                    style="color: #97c680;">Verify Email</a>
+                                {% endif %}
+                            </p>
+
+                            <p class="font-medium text-lg f-bold">
+                                <a href="{% url 'reset-password' %}">Password - ******* <span
+                                        style="color: #97c680;">Change</span></a>
+                            </p>
+                        </div>
+
+                        <div id="personal-info" class="f-medium py-4">
+                            <div class="grid grid-cols-2 gap-8 my-2.5">
+                                <div class="flex flex-col">
+                                    <label class="leading-loose capitalize">First Name</label>
+                                    <input type="text"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none {% if fname == "None" %}text-gray-600{% endif %}"
+                                        placeholder="Amit" name="fname" value="{{fname}}">
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="leading-loose capitalize">Last Name</label>
+                                    <input type="text"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none {% if lname == "None" %}text-gray-600{% endif %}"
+                                        placeholder="Sharma" name="lname" value="{{lname}}">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4 my-2.5">
+                                <div class="flex flex-col">
+                                    <label class="leading-loose capitalize">Date Of Birth ({{dob}})</label>
+                                    <input type="date"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none {% if dob == "None" %}text-gray-600{% endif %}"
+                                        name="dob" value="{{dob}}">
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="leading-loose capitalize">Country</label>
+                                    <input type="text"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none {% if country == "None" %}text-gray-600{% endif %}"
+                                        placeholder="India" name="country" value="{{country}}">
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="leading-loose capitalize">city</label>
+                                    <input type="text"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none {% if city == "None" %}text-gray-600{% endif %}"
+                                        placeholder="Delhi" name="city" value="{{city}}">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-8 my-2.5">
+                                <div class="flex flex-col">
+                                    <label class="leading-loose capitalize">Current Persuing Course(if any)</label>
+                                    <input type="text"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none {% if course == "None" %}text-gray-600{% endif %}"
+                                        placeholder="Bachelor in Physics" name="course" value="{{course}}">
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="leading-loose capitalize">Current Institute</label>
+                                    <input type="text"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none {% if institute == "None" %}text-gray-600{% endif %}"
+                                        placeholder="Delhi University" name="institute" value="{{institute}}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 flex items-center justify-end space-x-4">
+                            <button type="submit" class="btn-2 w-2/5">
+                                make changes
+                            </button>
+                    </form>
+                </div>
+            </div>
+            <div class="my-3">
+                <div class="bg-white rounded-lg shadow-lg p-4 px-4 md:p-8 mb-6">
+                    <div class="flex items-center space-x-5">
+                        <div
+                            class="h-14 w-14 bg-yellow-200 rounded-full flex flex-shrink-0 justify-center items-center text-yellow-600 text-2xl font-mono">
+                            <i class="fa fa-line-chart"></i>
+                        </div>
+                        <div class="block pl-2 self-start text-gray-700">
+                            <p class="font-medium text-xl f-bold">{% if user.first_name == "" %}
+                                User
+                                {% else %}
+                                {{user.first_name | title}}
+                                {% endif %}
+                                Statistics</p>
+                            <p class="f-light text-lg">Here you can see your performance and activity data
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="f-medium">
+                        <div class=" mb-2 mt-12">
+                            <p class="font-medium text-lg f-bold">Last Login - {{user.last_login}}
+                            </p>
+                            <p class="font-medium text-lg f-bold">Last Logout - {{user.last_logout}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% include '../blocks/dismisable-alert.html' %}
+
+{% endblock body %}

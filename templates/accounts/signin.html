@@ -1,0 +1,98 @@
+{% extends '../blocks/base.html' %}
+
+{% block title %}SignIn | ThinkInSphere{% endblock title %}
+
+
+{% block body %}
+
+<section id="signin">
+
+    <div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
+        <div class="relative py-3 sm:max-w-xl sm:mx-auto">
+            <div class="relative px-4 py-10 bg-white mx-8 md:mx-0 shadow-lg rounded-3xl sm:p-10">
+                <div class="max-w-md mx-auto">
+                    <div class="flex items-center space-x-5">
+                        <div
+                            class="h-14 w-14 bg-yellow-200 rounded-full flex flex-shrink-0 justify-center items-center text-yellow-600 text-2xl font-mono">
+                            <i class="fa fa-graduation-cap"></i>
+                        </div>
+                        <div class="block pl-2 text-xl self-start text-gray-700">
+                            <h2 class="leading-relaxed f-medium text-2xl">Register</h2>
+                            <h2 class="leading-relaxed f-light text-lg">and start learning with us</h2>
+                        </div>
+                    </div>
+                    <form method="post" action="" class="divide-y divide-gray-200 f-light">
+                        {% csrf_token %}
+                        
+                        {% if messages %}
+
+                        {% for message in messages %}
+                        <div class="{% if message.tags %}{{message.tags}}{% endif %} px-4 py-3 my-3 rounded relative"
+                            role="alert">
+                            <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                            <span class="block sm:inline">{{message}}</span>
+                        </div>
+                        {% endfor %}
+
+                        {% endif %}
+                        <div class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="flex flex-col">
+                                    <label class="leading-loose">First Name</label>
+                                    <input type="text"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none"
+                                        placeholder="Rohit" name="fname" value="{{fname}}">
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="leading-loose">Last Name</label>
+                                    <input type="text"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none"
+                                        placeholder="Sharma" name="lname" value="{{lname}}">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1">
+                                <div class="flex flex-col">
+                                    <label class="leading-loose">Email</label>
+                                    <input type="email"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none"
+                                        placeholder="example@example.com" name="email" value="{{email}}">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1">
+                                <div class="flex flex-col">
+                                    <label class="leading-loose">Date Of Birth</label>
+                                    <input type="date"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none" name="dob" value="{{dob}}">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="flex flex-col">
+                                    <label class="leading-loose">Password</label>
+                                    <input type="password"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none"
+                                        placeholder="*********" name="password" value="{{password}}">
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="leading-loose">Confirm Password</label>
+                                    <input type="password"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none"
+                                        placeholder="*********" name="cpassword" value="{{cpassword}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-4 flex items-center space-x-4">
+                            <button type="submit" class="btn-2 w-2/5">
+                                Register
+                            </button>
+                            <div class="w-2/3 text-right text-md">
+                                Already registered? <a href="{% url 'login' %}" style="color: #97c680;">LogIn</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock body %}

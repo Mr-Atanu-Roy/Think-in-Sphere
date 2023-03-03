@@ -1,0 +1,34 @@
+<header class="flex items-center justify-between py-1 px-14 z-30">
+    <div>
+        <a href="/"><img src="/static/images/Logo.png" alt="ThinkInSphere" class="w-20"></a>
+    </div>
+
+    <div>
+        <ul class="flex items-center justify-center text-xl">
+            <li><a href="{% url 'home' %}" class="nav-links mx-3">Home</a></li>
+            <li><a href="" class="nav-links mx-3">About Us</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'dashboard' %}" class="nav-links mx-3">Dashboard</a></li>
+            {% endif %}
+            <li><a href="https://github.com/Mr-Atanu-Roy/Think-in-Sphere" target="_blank" class="nav-links mx-3">Contribute</a></li>
+            <li><a href="" class="nav-links mx-3">Start Learning</a></li>
+            <li><a href="" class="nav-links mx-3">Courses</a></li>
+        </ul>
+    </div>
+
+    <div class="flex items-center justify-center">
+        {% if user.is_authenticated %}
+        <div>
+            <a href="{% url 'logout' %}" class="nav-links text-xl mr-5 f-medium">LogOut</a>
+        </div>
+        {% else %}
+        <div>
+            <a href="{% url 'login' %}" class="nav-links text-xl mr-5 f-medium">LogIn</a>
+        </div>
+        {% endif %}
+        <div>
+            <a href="" class="btn-1 text-xl">Chatbot</a>
+        </div>
+    </div>
+
+</header>

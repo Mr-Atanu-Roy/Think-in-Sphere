@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     
     #own
     'core',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -146,3 +147,17 @@ MESSAGE_TAGS = {
 
 #settings for SESSION to expire at browser close
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  
+
+
+#for custom User Model
+AUTH_USER_MODEL = "accounts.User"
+
+
+#settings for sending mail
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') 
+

@@ -1,4 +1,4 @@
-{% extends '../base/base.html' %}
+{% extends '../blocks/base.html' %}
 
 
 {% block title %}ThinkInSphere | Home{% endblock title %}
@@ -26,21 +26,25 @@
     <video id="video-background" autoplay muted loop class="w-full h-full fixed top-0 left-0 -z-10 object-cover">
         <source src="/static/videos/home-animation.mp4" type="video/mp4">
     </video>
-    <div class="center-text w-full h-full relative -top-10 left-0 flex items-center justify-center">
+    <div class="center-text w-full h-full relative -top-5 left-0 flex items-center justify-center">
         <div class="text-center text-white">
             <h1 class="text-8xl f-bold relative top-0 left-0"><span class="p-col text-9xl">T</span>hink In Sphere</h1>
             <h2 class="text-3xl f-medium capitalize my-5">A new way to revolutionize <span class="p-col">online
                 education</span></h2>
             <div class="my-6 flex items-center justify-center">
-                <a href="" target="_blank" class="square_btn-1 mr-5">About Us</a>
                 {% if user.is_authenticated %}
-                <a href="" class="square_btn-1">Start Learing</a>
+                <a href="" class="square_btn-1 mr-5">Start Learing</a>
+                <a href="{% url 'dashboard' %}" class="square_btn">Dashboard</a>
                 {% else %}
-                <a href="" class="square_btn">Sign In</a>
+                <a href="{% url 'signin' %}" class="square_btn_1 mr-5">Sign In</a>
+                <a href="{% url 'login' %}" class="square_btn">Log In</a>
                 {% endif %}
             </div>
         </div>
     </div>
 </section>
+
+
+{% include '../blocks/dismisable-alert.html' %}
 
 {% endblock body %}

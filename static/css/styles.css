@@ -4,7 +4,7 @@
   font-weight: 400;
 }
 
-.f-medium, header .nav-links {
+.f-medium, header .nav-links, .btn-2, form input {
   font-family: "Roboto Slab", serif;
   font-weight: 500;
 }
@@ -72,6 +72,22 @@ header .nav-links:hover {
   color: #1e1e2f;
 }
 
+.btn-2 {
+  text-transform: uppercase;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 8px;
+  text-align: center;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  background-color: #1e1e2f !important;
+}
+
+.btn-2:hover {
+  color: black;
+  background-color: #97c680 !important;
+}
+
 .square_btn, .square_btn-1 {
   text-transform: uppercase;
   display: inline-block;
@@ -100,5 +116,13 @@ header .nav-links:hover {
   color: white;
   border-color: #97c680;
   background: none;
+}
+
+form input {
+  background: none;
+}
+
+form input:focus {
+  border: 2px solid #97c680;
 }
 /*# sourceMappingURL=styles.css.map */
