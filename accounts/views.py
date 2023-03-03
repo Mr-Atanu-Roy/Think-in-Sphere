@@ -234,7 +234,7 @@ def email_verification(request):
             else:
                 messages.error(request, "Email is required")
 
-        if request.method == "POST" and "verify-email" in request.POST:
+        elif request.method == "POST" and "verify-email" in request.POST:
             otp = request.POST.get("otp")
             otp = otp.lstrip()
             otp = otp.rstrip()
@@ -322,7 +322,7 @@ def reset_password(request):
             else:
                 messages.error(request, "Email is required")
                 
-        if request.method == "POST" and "verify-email" in request.POST:
+        elif request.method == "POST" and "verify-email" in request.POST:
             otp = request.POST.get("otp")
             password = request.POST.get("password")
             cpassword = request.POST.get("cpassword")

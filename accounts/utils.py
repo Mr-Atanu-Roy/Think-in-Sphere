@@ -6,7 +6,6 @@ from django.db import models
 import datetime
 import pytz
 
-
 # Get the timezone object for the timezone specified in settings.py
 tz = pytz.timezone(settings.TIME_ZONE)
 

@@ -1,10 +1,15 @@
 from django.contrib import admin
 from .models import *
+from core.models import ChatRoom
 
 # Register your models here.
 
 class ProfileInline(admin.StackedInline):
     model = UserProfile
+    
+class ChatRoomInline(admin.StackedInline):
+    model = ChatRoom
+    extra = 0
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('email', 'first_name', 'is_verified', 'is_staff', 'last_login')
@@ -26,7 +31,7 @@ class UserAdmin(admin.ModelAdmin):
         }),
     ]
     
-    inlines = [ProfileInline]
+    inlines = [ProfileInline, ChatRoomInline]
     
     search_fields = ["email", "first_name", "last_name", "is_verified"]
     

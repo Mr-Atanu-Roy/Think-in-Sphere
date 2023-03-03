@@ -1,7 +1,7 @@
 {% extends '../blocks/base.html' %}
 
 
-{% block title %}ThinkInSphere | Home{% endblock title %}
+{% block title %}ThinkInSphere | A New Way To Revolutionize Online Education{% endblock title %}
 
 {% block styles %}
 
@@ -33,7 +33,7 @@
                 education</span></h2>
             <div class="my-6 flex items-center justify-center">
                 {% if user.is_authenticated %}
-                <a href="" class="square_btn-1 mr-5">Start Learing</a>
+                <a href="{% url 'course' %}" class="square_btn-1 mr-5">Start Learing</a>
                 <a href="{% url 'dashboard' %}" class="square_btn">Dashboard</a>
                 {% else %}
                 <a href="{% url 'signin' %}" class="square_btn_1 mr-5">Sign In</a>

@@ -1,0 +1,38 @@
+{% extends '../blocks/base.html' %}
+
+
+{% block title %} {{user.first_name}} | Chat Rooms{% endblock title %}
+
+{% block styles %}
+<style>
+    body{
+        background-color: rgb(243 244 246 / 1);
+    }
+</style>
+{% endblock styles %}
+
+{% block body %}
+
+
+<section id="chat-rooms" class="flex items-center justify-center pt-16">
+    <div class="rounded-lg shadow-lg p-12 w-1/2 bg-white">
+        <div class="flex justify-between items-center mb-8">
+            <p class="text-xl f-medium">{{user.first_name}}'s Chat Rooms</p>
+            <a href="" class="btn-1 rounded-md py-3.5 uppercase">Create room</a>
+        </div>
+        <div class="flex-col justify-between items-center">
+            {% for chatroom in chatRooms %}
+                <div class="chat-room-box rounded-md p-3.5 my-1.5">
+                    <a href="/chat/room/{{chatroom.room_id}}">
+                        <p class="text-lg font-medium">{{chatroom.room_name}}</p>
+                        <p class="f-light text-gray-500 text-sm">Created : {{chatroom.created_at}}</p>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% include '../blocks/dismisable-alert.html' %}
+
+{% endblock body %}
