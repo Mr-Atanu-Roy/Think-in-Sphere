@@ -12,7 +12,7 @@ from core.utils import random_name
 class ChatRoom(BaseModel):
     '''This model contains chatrooms created by user'''
     
-    room_id = models.UUIDField(default=uuid.uuid4())
+    room_id = models.UUIDField(default=uuid.uuid4)
     room_name = models.CharField(max_length=300, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
