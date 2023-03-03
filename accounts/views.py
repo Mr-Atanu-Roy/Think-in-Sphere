@@ -181,7 +181,6 @@ def dashboard(request):
     except Exception as e:
         print(e)
     
-    print(dob)
     context["fname"] = request.user.first_name
     context["lname"] = request.user.last_name
     context["dob"] = dob
