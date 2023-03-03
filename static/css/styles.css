@@ -9,7 +9,7 @@
   font-weight: 500;
 }
 
-.f-bold, .btn-1 {
+.f-bold, .btn-1, .square_btn, .square_btn-1 {
   font-family: "Roboto Slab", serif;
   font-weight: 700;
 }
@@ -22,7 +22,13 @@
   scroll-behavior: smooth;
 }
 
+.p-col {
+  color: #97c680;
+}
+
 header {
+  width: 100%;
+  background: white;
   -webkit-box-shadow: rgba(17, 12, 46, 0.15) 0px 25px 60px 0px;
           box-shadow: rgba(17, 12, 46, 0.15) 0px 25px 60px 0px;
   position: -webkit-sticky;
@@ -66,11 +72,33 @@ header .nav-links:hover {
   color: #1e1e2f;
 }
 
-#home #hero-img-container {
-  width: 50%;
+.square_btn, .square_btn-1 {
+  text-transform: uppercase;
+  display: inline-block;
+  padding: 1em 2.8em;
+  text-decoration: none;
+  color: #97c680;
+  border: solid 3.5px #97c680;
+  border-radius: 4px;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  background: none;
 }
 
-#home #hero-img-container img {
-  width: 100%;
+.square_btn:hover, .square_btn-1:hover {
+  background: white;
+  color: #1e1e2f;
+  border-color: white;
+}
+
+.square_btn-1 {
+  color: #1e1e2f;
+  background: #97c680;
+}
+
+.square_btn-1:hover {
+  color: white;
+  border-color: #97c680;
+  background: none;
 }
 /*# sourceMappingURL=styles.css.map */

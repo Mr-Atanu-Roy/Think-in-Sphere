@@ -22,7 +22,13 @@ $primary-col: #97c680;
     scroll-behavior: smooth;
 }
 
+.p-col{
+  color: $primary-col;
+}
+
 header {
+  width: 100%;
+  background: white;
   box-shadow: rgba(17, 12, 46, 0.15) 0px 25px 60px 0px;
   position: sticky;
   top: 0;
@@ -57,12 +63,31 @@ header {
   }
 }
 
+.square_btn {
+  @extend .f-bold;
+  text-transform: uppercase;
+  display: inline-block;
+  padding: 1em 2.8em;
+  text-decoration: none;
+  color: $primary-col;
+  border: solid 3.5px $primary-col;
+  border-radius: 4px;
+  transition: all 0.3s ease-in-out;
+  background: none;
+  &:hover {
+    background: white;
+    color: #1e1e2f;
+    border-color: white;
+  }
+}
 
-#home{
-    #hero-img-container{
-        width: 50%;
-        img{
-            width: 100%;
-        }
-    }
+.square_btn-1{
+  @extend .square_btn;
+  color: #1e1e2f;
+  background: $primary-col;
+  &:hover{
+    color: white;
+    border-color: $primary-col;
+    background: none;
+  }
 }
