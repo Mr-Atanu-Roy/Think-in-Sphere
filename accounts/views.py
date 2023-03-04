@@ -158,7 +158,7 @@ def dashboard(request):
         searchHistory = UserRequestHistory.objects.filter(created_at__gte = last_month, chatroom__user=request.user).order_by('-created_at')
         searchHistoryCount = UserRequestHistory.objects.filter(created_at__gte = last_month).count()
         
-        no_searches = UserRequestHistory.objects.filter(created_at__gte=last_month).annotate(date=TruncDate('created_at')).values('date').annotate(total=Count('id'))
+        no_searches = UserRequestHistory.objects.filter(created_at__gte=last_month, chatroom__user=request.user).annotate(date=TruncDate('created_at')).values('date').annotate(total=Count('id'))
         chart_data = []
         
         if len(no_searches) > 0:
