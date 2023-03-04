@@ -6,7 +6,7 @@ from django.contrib import messages
 from accounts.models import User
 from core.models import ChatRoom, UserRequestHistory
 
-from core.utils import Speak
+from core.utils import Speak, random_name
 
 import openai
 import speech_recognition as sr
@@ -16,9 +16,11 @@ from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.core.cache import cache
 
+
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
-# Load your API key from an environment variable or secret management service
+
+# Load OPENAI API key from environment variable
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 # Create your views here.
@@ -37,6 +39,36 @@ def chatRooms(request):
     
 
     return render(request, './core/view-chatrooms.html', context)
+
+
+@login_required(login_url="/auth/login")
+def createRoom(request):
+    room_name = random_name()
+    context = {
+        "room_name" : room_name,
+    }
+    
+    try:
+        if request.method == "POST":
+            room_name = request.POST.get('room_name')
+            
+            if room_name != "":
+                if len(room_name) > 10:
+                    newRoom = ChatRoom(user=request.user, room_name=room_name)
+                    newRoom.save()
+                    
+                    return redirect(f'/chat/room/{newRoom.room_id}')
+                else:
+                    messages.error(request, "Room name too small")
+            else:
+                messages.error(request, "Room name is required")
+        
+    except Exception as e:
+        print(e)
+        
+    context["room_name"] = room_name
+    
+    return render(request, './core/create-room.html', context)
 
 
 @login_required(login_url="/auth/login")

@@ -8,8 +8,9 @@
             <li><a href="{% url 'home' %}" class="nav-links mx-3">Home</a></li>
             {% if user.is_authenticated %}
             <li><a href="{% url 'dashboard' %}" class="nav-links mx-3">Dashboard</a></li>
+            <li><a href="{% url 'chat-rooms' %}" class="nav-links mx-3">My Rooms</a></li>
             {% endif %}
-            <li><a href="{% url 'chat-rooms' %}" class="nav-links mx-3">Start Learning</a></li>
+            <li><a href="{{last_room_url}}" class="nav-links mx-3">Start Learning</a></li>
             <li><a href="{% url 'course' %}" class="nav-links mx-3">Courses</a></li>
         </ul>
     </div>

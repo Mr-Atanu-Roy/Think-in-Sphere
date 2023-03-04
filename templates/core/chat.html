@@ -10,9 +10,9 @@
 <section id="chat">
     <div class="grid grid-cols-9">
 
-        
+
         <div class="col-span-7" id="chat-container">
-            
+
             <div id="chats" class="flex-col items-center justify-center pt-12 pb-32">
                 <div class="mx-auto w-4/6 flex-col items center justify-center">
                     {% for chat in chats %}
@@ -70,24 +70,30 @@
             </div>
         </div>
 
-        <div class="col-span-2 py-7 px-5 h-screen fixed top-14 right-0 z-20" id="rooms-container">
-            {% for chatroom in chatRooms %}
-            <div class="my-4 text-white text-sm ">
-                <a href="/chat/room/{{chatroom.room_id}}" class="flex justify-start items-start">
-                    <i class="fa fa-commenting relative top-1"></i>
-                    <p class="ml-2.5 font-medium">{{chatroom.room_name | truncatechars:40}}</p>
-                </a>
+        <div class="col-span-2 pt-12 pb-16 px-5 h-screen fixed top-14 right-0 z-20 flex-col justify-between items-center" id="rooms-container">
+            <div class="">
+                <a href="{% url 'create-room' %}" class="square_btn-1 w-full rounded text-center">New Room <i class="fa fa-plus ml-2"></i></a>
             </div>
-            {% endfor %}
+            <div>
+                {% for chatroom in chatRooms %}
+                <div class="my-4 text-white text-sm ">
+                    <a href="/chat/room/{{chatroom.room_id}}" class="flex justify-start items-start">
+                        <i class="fa fa-commenting relative top-1"></i>
+                        <p class="ml-2.5 font-medium">{{chatroom.room_name | truncatechars:40}}</p>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
         </div>
 
-       
+
 
         <!-- scroll to bottom btn  -->
         {% if chats != "" %}
-        <i class="fa fa-arrow-circle-down fixed bottom-14 left-8 text-gray-700 text-2xl cursor-pointer z-50" onclick="scrollToBottom()"></i>
+        <i class="fa fa-arrow-circle-down fixed bottom-14 left-8 text-gray-700 text-2xl cursor-pointer z-50"
+            onclick="scrollToBottom()"></i>
         {% endif %}
-        
+
     </div>
 
 </section>
