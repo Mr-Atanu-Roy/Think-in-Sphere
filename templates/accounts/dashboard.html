@@ -194,7 +194,7 @@
                 $("#query-search-result").html("");
             }else{
             $.ajax({
-                url: ' {%url "get-query-search-result"%}',
+                url: ' {%url "dashboard-search-history"%}',
                 type: 'GET',
                 data: {
                     "query": $("#query-search").val().trim(),

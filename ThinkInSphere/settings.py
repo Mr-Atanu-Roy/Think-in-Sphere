@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     #own
     'core',
     'accounts',
+    'API',
 ]
 
 MIDDLEWARE = [
