@@ -29,7 +29,7 @@ def home(request):
 
 @login_required(login_url="/auth/login")
 def chatRooms(request):
-    chatRooms = ChatRoom.objects.filter(user=request.user)
+    chatRooms = ChatRoom.objects.filter(user=request.user).order_by('-created_at')
     
     context = {
         "chatRooms" : chatRooms,
@@ -47,7 +47,7 @@ def chat(request, room_id):
         "result" : result,
     }
     
-    chatRooms = ChatRoom.objects.filter(user=request.user)
+    chatRooms = ChatRoom.objects.filter(user=request.user).order_by('-created_at')
     context["chatRooms"] = chatRooms
     try:
         getRoom = ChatRoom.objects.get(room_id=room_id)

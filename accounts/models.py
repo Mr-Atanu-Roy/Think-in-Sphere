@@ -34,6 +34,7 @@ class User(AbstractUser):
     class Meta:
         db_table = 'auth_user'
         verbose_name_plural = "Think-In-Sphere User"
+        ordering = ['date_joined']
     
     def __str__(self):
         return self.email
@@ -54,6 +55,7 @@ class UserProfile(BaseModel):
     
     class Meta:
         verbose_name_plural = "User Profile"
+        ordering = ['created_at']
     
     def __str__(self):
         return str(self.user.email)
@@ -67,6 +69,7 @@ class OTP(BaseModel):
     
     class Meta:
         verbose_name_plural = "Auth OTP"
+        ordering = ['created_at']
     
     def __str__(self):
         return self.otp

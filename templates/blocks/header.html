@@ -6,11 +6,9 @@
     <div>
         <ul class="flex items-center justify-center text-xl">
             <li><a href="{% url 'home' %}" class="nav-links mx-3">Home</a></li>
-            <li><a href="" class="nav-links mx-3">About Us</a></li>
             {% if user.is_authenticated %}
             <li><a href="{% url 'dashboard' %}" class="nav-links mx-3">Dashboard</a></li>
             {% endif %}
-            <li><a href="https://github.com/Mr-Atanu-Roy/Think-in-Sphere" target="_blank" class="nav-links mx-3">Contribute</a></li>
             <li><a href="{% url 'chat-rooms' %}" class="nav-links mx-3">Start Learning</a></li>
             <li><a href="{% url 'course' %}" class="nav-links mx-3">Courses</a></li>
         </ul>
@@ -27,7 +25,7 @@
         </div>
         {% endif %}
         <div>
-            <a href="{% url 'chat-rooms' %}" class="btn-1 text-xl">Chatbot</a>
+            <a href="{{last_room_url}}" class="btn-1 text-xl">ChatBot</a>
         </div>
     </div>
 

@@ -21,18 +21,22 @@ class ChatRoom(BaseModel):
     
     class Meta:
         verbose_name_plural = "Chat Rooms"
+        ordering = ['created_at']
     
     
 class UserRequestHistory(BaseModel):
+    '''This models contains all the search history of a user'''
+    
     chatroom = models.ManyToManyField(ChatRoom)
     request = models.TextField()
-    response = models.TextField()
+    response = models.TextField(default="generated course")
 
     def __str__(self):
         return self.request
     
     class Meta:
         verbose_name_plural = "User Search History"
+        ordering = ['created_at']
         
         
 #SIGNALS
