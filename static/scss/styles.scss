@@ -110,8 +110,6 @@ header {
   }
 }
 
-
-
 form {
   input {
     background: none;
@@ -122,9 +120,6 @@ form {
   }
 }
 
-
-
-
 #chat-rooms {
   .chat-room-box {
     border: 2px solid $primary-col;
@@ -133,8 +128,6 @@ form {
     }
   }
 }
-
-
 
 #chat {
   #rooms-container {
@@ -185,6 +178,54 @@ form {
         background-color: $secondary-col;
         border-top-left-radius: 0;
       }
+    }
+  }
+}
+
+#dashboard {
+  #user-stats {
+    .accordion {
+      @extend .f-medium;
+      text-transform: capitalize;
+      border-radius: 8px;
+      margin: 10px 0;
+      background-color: #eee;
+      color: $secondary-col;
+      cursor: pointer;
+      padding: 18px;
+      width: 100%;
+      text-align: left;
+      border: none;
+      outline: none;
+      transition: 0.4s;
+    }
+
+    /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+    .active,
+    .accordion:hover {
+      background-color: $primary-bg;
+    }
+
+    /* Style the accordion panel. Note: hidden by default */
+    .panel {
+      @extend .f-light;
+      padding: 0 8px;
+      background-color: white;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease-out;
+      
+    }
+    .accordion:after {
+      content: "\02795"; /* Unicode character for "plus" sign (+) */
+      font-size: 13px;
+      color: #777;
+      float: right;
+      margin-left: 5px;
+    }
+
+    .active:after {
+      content: "\2796"; /* Unicode character for "minus" sign (-) */
     }
   }
 }

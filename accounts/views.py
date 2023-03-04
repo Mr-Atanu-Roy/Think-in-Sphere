@@ -2,11 +2,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import JsonResponse, HttpResponse
+from django.views.generic import View
 
 from accounts.models import User, OTP, UserProfile
+from core.models import ChatRoom, UserRequestHistory
 from accounts.utils import current_time
 
 import datetime
+from django.contrib.humanize.templatetags.humanize import naturalday
 
 
 # Create your views here.
@@ -124,10 +128,11 @@ def login(request):
 
 
 
-
 @login_required(login_url="/auth/login")
 def dashboard(request):
     fname = lname = dob = country = city = course = institute = ""
+    searchHistory = searchHistoryCount = ""
+    last_month = current_time - datetime.timedelta(days=30)
     context = {
         'fname': fname,
         'lname': lname,
@@ -148,6 +153,11 @@ def dashboard(request):
         country = getProfile.country
         course = getProfile.course_name
         institute = getProfile.institute_name
+        
+        '''Get user's data for statistics'''
+        searchHistory = UserRequestHistory.objects.filter(created_at__gte = last_month, chatroom__user=request.user).order_by('-created_at')
+        searchHistoryCount = UserRequestHistory.objects.filter(created_at__gte = last_month).count()
+        
     except Exception as e:
         getProfile = None
         print(e)
@@ -188,8 +198,13 @@ def dashboard(request):
     context["country"] = country
     context["course"] = course
     context["institute"] = institute
+    
+    context["lastMonth"] = last_month
+    context["searchHistory"] = searchHistory
+    context["searchHistoryCount"] = searchHistoryCount
         
     return render(request, './accounts/dashboard.html', context)
+
 
 
 def email_verification(request):
@@ -287,6 +302,7 @@ def email_verification(request):
     return render(request, './accounts/email-verification.html')
 
 
+
 def reset_password(request):
     email = otp = password = cpassword = ""
     context = {
@@ -380,3 +396,27 @@ def logout(request):
     auth.logout(request)  
     messages.warning(request, "You are logged out now")  
     return redirect('login')
+
+
+
+
+class SearchQueryView(View):
+    '''Handels ajax request'''
+    
+    def get(self, request):
+        try:
+            query = request.GET.get('query')
+            
+            if query.isspace() == False:
+                last_month = current_time - datetime.timedelta(days=30)
+                result = UserRequestHistory.objects.filter(chatroom__user=request.user, created_at__gte=last_month, request__icontains=query).order_by('-created_at')
+            
+                data = [{'id': obj.id, 'request': obj.request[0:45], 'created_at' : naturalday(obj.created_at)} for obj in result]
+                print(data)
+                return JsonResponse(data, safe=False)
+            
+            return JsonResponse("", safe=False)
+            
+        except Exception as e:
+            print(e)
+        

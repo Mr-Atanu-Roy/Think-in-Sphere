@@ -10,4 +10,7 @@ urlpatterns = [
     
     path('email-verification/', email_verification, name="email-verification"),
     path('reset-password/', reset_password, name="reset-password"),
+    
+    
+    path('dashboard/get-query-search-result/', SearchQueryView.as_view(), name="get-query-search-result"),
 ]

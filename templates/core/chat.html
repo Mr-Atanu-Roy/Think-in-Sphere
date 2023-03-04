@@ -16,7 +16,7 @@
             <div id="chats" class="flex-col items-center justify-center pt-12 pb-32">
                 <div class="mx-auto w-4/6 flex-col items center justify-center">
                     {% for chat in chats %}
-                    <div class="text-right my-2">
+                    <div id="request-{{chat.id}}" class="text-right my-2">
                         <div class="flex items-center justify-end max-w-fit ml-auto mb-1">
                             <p class="f-medium capitalize text-black">{{user.first_name}}</p>
                             <img src="/static/images/user-icon-black.png" class="ml-1.5 w-6" alt="Think-In-Sphere">
@@ -30,7 +30,7 @@
                         </div>
                         <p class="f-medium capitalize text-gray-600 text-xs">{{chat.created_at}}</p>
                     </div>
-                    <div>
+                    <div id="response-{{chat.id}}">
                         <div class="flex items-center justify-end max-w-fit mb-1">
                             <img src="/static/images/Logo.png" class="w-6 mr-1.5" alt="Think-In-Sphere">
                             <p class="f-medium capitalize text-black">Think-In-Sphere</p>
@@ -57,13 +57,13 @@
                             class="mx-auto h-12 border-0 outline-none rounded-md text-white text-lg" autocomplete="off"
                             placeholder="Ask for anything">
 
-                        <button type="submit" name="text-input" class="mx-5">
+                        <button type="submit" name="text-input" class="pr-3.5 pl-2">
                             <i class="fa fa-paper-plane p-color text-xl"></i>
                         </button>
                     </form>
                     <form action="" method="post">
                         {% csrf_token %}
-                        <button type="submit" name="voice-input" id="voice-input"><i
+                        <button type="submit" name="voice-input" class="pl-3.5 border-l" id="voice-input"><i
                                 class="fa fa-microphone text-xl"></i></button>
                     </form>
                 </div>
