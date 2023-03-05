@@ -25,7 +25,7 @@ class ChatRoom(BaseModel):
     
     
 class UserRequestHistory(BaseModel):
-    '''This models contains all the search history of a user'''
+    '''This models contains all the chat history of a user'''
     
     chatroom = models.ManyToManyField(ChatRoom)
     request = models.TextField()
@@ -35,9 +35,9 @@ class UserRequestHistory(BaseModel):
         return self.request
     
     class Meta:
-        verbose_name_plural = "User Search History"
+        verbose_name_plural = "User Chat Search History"
         ordering = ['created_at']
-        
+       
         
 #SIGNALS
 @receiver(post_save, sender=ChatRoom)

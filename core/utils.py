@@ -45,12 +45,12 @@ def openai_completion_endpoint(query):
     response = openai.Completion.create(
     model="text-davinci-003",
     prompt=prompt,
-    max_tokens=2048,
+    max_tokens=1500,
     temperature=0.9,
     top_p=1,
     frequency_penalty=0.0,
     presence_penalty=0.6,
-    stop=[" Human:", " AI:"]
+    stop=[" Human:", " AI:"],
     )
     
     result =  response["choices"][0]["text"]
@@ -72,4 +72,20 @@ def openai_image_endpoint(query):
         imgURLS.append(img["url"])
     
     return imgURLS
+
+
+def openai_general_endpoint(prompt, token=2045, temperature=0.7):
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt=f"Generate subtopics for course {prompt}",
+        temperature=temperature,
+        max_tokens=token,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0,
+        stream = False,
+    )
+    result = response.choices[0].text.strip()
+    
+    return result
 

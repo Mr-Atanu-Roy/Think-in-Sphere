@@ -7,10 +7,12 @@ import datetime
 
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.template.defaultfilters import truncatewords
+
+from .utils import courses_list
 # Create your views here.
 
-class SearchQueryView(View):
-    '''Handels ajax request'''
+class DashboardSearchQueryView(View):
+    '''Handels dashboard search ajax request'''
     
     def get(self, request):
         try:
@@ -28,3 +30,21 @@ class SearchQueryView(View):
         except Exception as e:
             print(e)
         
+class CourseSerchQueryView(View):
+    '''handels course search ajax request'''
+    
+    def get(self, request):
+        try:
+            query = request.GET.get('query')
+            if query.isspace() == False:
+                similar_course = []
+                for course in courses_list:
+                    if query.lower() in course.lower():
+                        similar_course.append(course.title())
+                
+                return JsonResponse({"data": similar_course})
+                
+            return JsonResponse("", safe=False)
+            
+        except Exception as e:
+            print(e)   

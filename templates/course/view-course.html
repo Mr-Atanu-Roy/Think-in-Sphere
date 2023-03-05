@@ -1,0 +1,53 @@
+{% extends '../blocks/base.html' %}
+
+
+{% block title %} {{course | title}} | ThinkInSphere{% endblock title %}
+
+
+{% block body %}
+
+
+<section id="view-course" class="h-screen w-full py-20">
+    <div class="flex-col justify-center items-center max-w-5xl mx-auto mb-6">
+        <p class="f-light text-gray-600 mb-1.5">Didn't find a topic? Search here and press enter</p>
+        <form action="" method="post" class="flex items-center rounded-lg py-1.5" style="background-color: #1e1e2f;">
+            {% csrf_token %}
+            <div class="pl-3">
+                <i class="fa fa-search text-gray-300"></i>
+            </div>
+            <input
+                class="shadow-sm border-none focus:border-none outline-none w-full rounded-md text-white f-medium leading-tight focus:outline-none p-3"
+                id="topic-search" name="topic-search" type="text" value="{{topic_search}}"
+                placeholder="Search for any tpoic" style="background-color: #1e1e2f;">
+        </form>
+    </div>
+
+    <div class="flex flex-wrap justify-center items-center max-w-7xl mx-auto">
+        {% if result == "" %}
+
+        <div
+            class="m-7 flex-col items-center justify-center text-center rounded-lg border-4 border-dashed p-6 w-64 h-6w-64">
+            <div class="text-center flex items-center justify-center">
+                <img class="object-center w-36" src="/static/images/icons/read.png" alt="nothing found for {{course}}">
+            </div>
+            <p class="pointer-none text-gray-600 f-medium mt-6 text-center capitalize">nothing found for {{course}}</p>
+        </div>
+        {% else %}
+
+        {% for topic in result %}
+        <a href="/course/view/topic/{{topic|lower}} in {{course}}"
+            class="m-7 flex-col items-center justify-center text-center rounded-lg border-4 border-dashed p-7 w-72 h-72">
+            <div class="text-center flex items-center justify-center">
+                <img class="object-center w-40" src="/static/images/icons/read.png" alt="{{topic|lower}}">
+            </div>
+            <p class="pointer-none text-gray-600 f-medium mt-6 text-center capitalize">{{topic|title}}</p>
+        </a>
+        {% endfor %}
+
+        {% endif %}
+    </div>
+</section>
+
+{% include '../blocks/dismisable-alert.html' %}
+
+{% endblock body %}

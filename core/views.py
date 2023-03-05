@@ -97,7 +97,8 @@ def chat(request, room_id):
     try:
         if request.method == "POST" and "text-input" in request.POST:
             query = request.POST.get("query")
-            if query == "":
+            query = query.lower()
+            if query.isspace():
                 message = "Please input some text"
                 messages.error(request, message)
                 result = message
@@ -136,7 +137,8 @@ def chat(request, room_id):
             # recognize speech using Google Speech Recognition
             try:
                 query = r.recognize_google(audio)
-                if query == "":
+                query = query.lower()
+                if query.isspace():
                     message = "Please say something"
                     messages.error(request, message)
                     result = message
@@ -182,14 +184,4 @@ def chat(request, room_id):
     return render(request, './core/chat.html', context)
 
 
-@login_required(login_url="/auth/login")
-def course(request):
-    
-    return render(request, './core/course.html')
-
-
-@login_required(login_url="/auth/login")
-def courseSearch(request, course):
-    
-    return render(request, './core/view-course.html')
 
