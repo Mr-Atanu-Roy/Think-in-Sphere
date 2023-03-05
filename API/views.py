@@ -36,13 +36,14 @@ class CourseSerchQueryView(View):
     def get(self, request):
         try:
             query = request.GET.get('query')
-            if query.isspace() == False:
-                similar_course = []
-                for course in courses_list:
-                    if query.lower() in course.lower():
-                        similar_course.append(course.title())
-                
-                return JsonResponse({"data": similar_course})
+            if query:
+                if query.isspace() == False:
+                    similar_course = []
+                    for course in courses_list:
+                        if query.lower() in course.lower():
+                            similar_course.append(course.title())
+                    
+                    return JsonResponse({"data": similar_course})
                 
             return JsonResponse("", safe=False)
             
