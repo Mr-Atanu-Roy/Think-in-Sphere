@@ -1,10 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500;700&display=swap");
-.f-light {
+.f-light, #chat #chat-container #text-query, #dashboard #user-stats .panel {
   font-family: "Roboto Slab", serif;
   font-weight: 400;
 }
 
-.f-medium, header .nav-links, .btn-2, form input {
+.f-medium, header .nav-links, .btn-2, form input, #dashboard #user-stats .accordion {
   font-family: "Roboto Slab", serif;
   font-weight: 500;
 }
@@ -99,6 +99,7 @@ header .nav-links:hover {
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
   background: none;
+  text-align: center;
 }
 
 .square_btn:hover, .square_btn-1:hover {
@@ -124,5 +125,123 @@ form input {
 
 form input:focus {
   border: 2px solid #97c680;
+}
+
+#chat-rooms .chat-room-box {
+  border: 2px solid #97c680;
+}
+
+#chat-rooms .chat-room-box:hover {
+  background: #ddf7d1;
+}
+
+#chat #rooms-container {
+  background: #1e1e2f;
+}
+
+#chat #chat-container #chat-form-container,
+#chat #chat-container #text-query {
+  background-color: #1e1e2f;
+}
+
+#chat #chat-container #chat-form-container {
+  position: relative;
+  left: -11%;
+}
+
+#chat #chat-container #text-query {
+  border: none;
+  outline: none;
+  width: 550px;
+}
+
+#chat #chat-container #chats .query-box-container,
+#chat #chat-container #chats .result-box-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#chat #chat-container #chats .query-box-container {
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: end;
+}
+
+#chat #chat-container #chats .result-box-container {
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: start;
+}
+
+#chat #chat-container #chats .query-box,
+#chat #chat-container #chats .result-box {
+  color: white;
+  max-width: 65%;
+  margin: 5px 0;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+}
+
+#chat #chat-container #chats .query-box {
+  background-color: #97c680;
+  border-top-right-radius: 0;
+}
+
+#chat #chat-container #chats .result-box {
+  background-color: #1e1e2f;
+  border-top-left-radius: 0;
+}
+
+#dashboard #user-stats {
+  /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+  /* Style the accordion panel. Note: hidden by default */
+}
+
+#dashboard #user-stats .accordion {
+  text-transform: capitalize;
+  border-radius: 8px;
+  margin: 10px 0;
+  background-color: #eee;
+  color: #1e1e2f;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+#dashboard #user-stats .active,
+#dashboard #user-stats .accordion:hover {
+  background-color: #ddf7d1;
+}
+
+#dashboard #user-stats .panel {
+  padding: 0 8px;
+  background-color: white;
+  max-height: 0;
+  overflow: hidden;
+  -webkit-transition: max-height 0.2s ease-out;
+  transition: max-height 0.2s ease-out;
+}
+
+#dashboard #user-stats .accordion:after {
+  content: "\02795";
+  /* Unicode character for "plus" sign (+) */
+  font-size: 13px;
+  color: #777;
+  float: right;
+  margin-left: 5px;
+}
+
+#dashboard #user-stats .active:after {
+  content: "\2796";
+  /* Unicode character for "minus" sign (-) */
 }
 /*# sourceMappingURL=styles.css.map */

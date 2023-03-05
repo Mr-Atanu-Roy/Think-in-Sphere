@@ -10,4 +10,5 @@ urlpatterns = [
     
     path('email-verification/', email_verification, name="email-verification"),
     path('reset-password/', reset_password, name="reset-password"),
+    
 ]

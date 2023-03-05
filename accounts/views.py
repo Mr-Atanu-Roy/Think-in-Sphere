@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from accounts.models import User, OTP, UserProfile
+from core.models import UserRequestHistory
 from accounts.utils import current_time
 
 import datetime
@@ -124,10 +125,11 @@ def login(request):
 
 
 
-
 @login_required(login_url="/auth/login")
 def dashboard(request):
     fname = lname = dob = country = city = course = institute = ""
+    searchHistory = searchHistoryCount = ""
+    last_month = current_time - datetime.timedelta(days=30)
     context = {
         'fname': fname,
         'lname': lname,
@@ -148,6 +150,11 @@ def dashboard(request):
         country = getProfile.country
         course = getProfile.course_name
         institute = getProfile.institute_name
+        
+        '''Get user's data for statistics'''
+        searchHistory = UserRequestHistory.objects.filter(created_at__gte = last_month, chatroom__user=request.user).order_by('-created_at')
+        searchHistoryCount = UserRequestHistory.objects.filter(created_at__gte = last_month).count()
+        
     except Exception as e:
         getProfile = None
         print(e)
@@ -188,8 +195,13 @@ def dashboard(request):
     context["country"] = country
     context["course"] = course
     context["institute"] = institute
+    
+    context["lastMonth"] = last_month
+    context["searchHistory"] = searchHistory
+    context["searchHistoryCount"] = searchHistoryCount
         
     return render(request, './accounts/dashboard.html', context)
+
 
 
 def email_verification(request):
@@ -234,7 +246,7 @@ def email_verification(request):
             else:
                 messages.error(request, "Email is required")
 
-        if request.method == "POST" and "verify-email" in request.POST:
+        elif request.method == "POST" and "verify-email" in request.POST:
             otp = request.POST.get("otp")
             otp = otp.lstrip()
             otp = otp.rstrip()
@@ -287,6 +299,7 @@ def email_verification(request):
     return render(request, './accounts/email-verification.html')
 
 
+
 def reset_password(request):
     email = otp = password = cpassword = ""
     context = {
@@ -322,7 +335,7 @@ def reset_password(request):
             else:
                 messages.error(request, "Email is required")
                 
-        if request.method == "POST" and "verify-email" in request.POST:
+        elif request.method == "POST" and "verify-email" in request.POST:
             otp = request.POST.get("otp")
             password = request.POST.get("password")
             cpassword = request.POST.get("cpassword")
@@ -380,3 +393,9 @@ def logout(request):
     auth.logout(request)  
     messages.warning(request, "You are logged out now")  
     return redirect('login')
+
+
+
+
+
+        

@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500;700&display=swap");
 
 $primary-col: #97c680;
+$secondary-col: #1e1e2f;
+$primary-bg: #ddf7d1;
 
 .f-light {
   font-family: "Roboto Slab", serif;
@@ -15,14 +17,14 @@ $primary-col: #97c680;
   font-weight: 700;
 }
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    scroll-behavior: smooth;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
-.p-col{
+.p-col {
   color: $primary-col;
 }
 
@@ -34,10 +36,10 @@ header {
   top: 0;
   left: 0;
   .nav-links {
-      @extend .f-medium;
+    @extend .f-medium;
     display: inline-block;
     box-shadow: inset 0 0 0 0 $primary-col;
-    color: #1e1e2f;
+    color: $secondary-col;
     text-align: center;
     text-decoration: none;
     transition: all 0.25s ease-in-out;
@@ -54,12 +56,12 @@ header {
   padding: 10px 30px;
   border-radius: 100px;
   background-color: $primary-col;
-  box-shadow: inset 0 45px 0 -4.5px #1e1e2f;
+  box-shadow: inset 0 45px 0 -4.5px $secondary-col;
   text-align: center;
   transition: all 0.3s ease-in-out;
   &:hover {
-    box-shadow: inset 0 45px 0 -50px #1e1e2f;
-    color: #1e1e2f;
+    box-shadow: inset 0 45px 0 -50px $secondary-col;
+    color: $secondary-col;
   }
 }
 
@@ -71,10 +73,10 @@ header {
   border-radius: 8px;
   text-align: center;
   transition: all 0.3s ease-in-out;
-  background-color: #1e1e2f !important;
+  background-color: $secondary-col !important;
   &:hover {
     color: black;
-   background-color: $primary-col !important;
+    background-color: $primary-col !important;
   }
 }
 
@@ -89,30 +91,141 @@ header {
   border-radius: 4px;
   transition: all 0.3s ease-in-out;
   background: none;
+  text-align: center;
   &:hover {
     background: white;
-    color: #1e1e2f;
+    color: $secondary-col;
     border-color: white;
   }
 }
 
-.square_btn-1{
+.square_btn-1 {
   @extend .square_btn;
-  color: #1e1e2f;
+  color: $secondary-col;
   background: $primary-col;
-  &:hover{
+  &:hover {
     color: white;
     border-color: $primary-col;
     background: none;
   }
 }
 
-form{
-  input{
+form {
+  input {
     background: none;
     @extend .f-medium;
-    &:focus{
+    &:focus {
       border: 2px solid $primary-col;
+    }
+  }
+}
+
+#chat-rooms {
+  .chat-room-box {
+    border: 2px solid $primary-col;
+    &:hover {
+      background: $primary-bg;
+    }
+  }
+}
+
+#chat {
+  #rooms-container {
+    background: $secondary-col;
+  }
+  #chat-container {
+    #chat-form-container,
+    #text-query {
+      background-color: $secondary-col;
+    }
+    #chat-form-container {
+      position: relative;
+      left: -11%;
+    }
+    #text-query {
+      @extend .f-light;
+      border: none;
+      outline: none;
+      width: 550px;
+    }
+
+    #chats {
+      .query-box-container,
+      .result-box-container {
+        display: flex;
+        align-items: center;
+      }
+      .query-box-container {
+        justify-content: end;
+      }
+
+      .result-box-container {
+        justify-content: start;
+      }
+      .query-box,
+      .result-box {
+        color: white;
+        max-width: 65%;
+        margin: 5px 0;
+        border-radius: 10px;
+        padding: 0.65rem 1rem;
+      }
+      .query-box {
+        background-color: $primary-col;
+        border-top-right-radius: 0;
+      }
+      .result-box {
+        background-color: $secondary-col;
+        border-top-left-radius: 0;
+      }
+    }
+  }
+}
+
+#dashboard {
+  #user-stats {
+    .accordion {
+      @extend .f-medium;
+      text-transform: capitalize;
+      border-radius: 8px;
+      margin: 10px 0;
+      background-color: #eee;
+      color: $secondary-col;
+      cursor: pointer;
+      padding: 18px;
+      width: 100%;
+      text-align: left;
+      border: none;
+      outline: none;
+      transition: 0.4s;
+    }
+
+    /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+    .active,
+    .accordion:hover {
+      background-color: $primary-bg;
+    }
+
+    /* Style the accordion panel. Note: hidden by default */
+    .panel {
+      @extend .f-light;
+      padding: 0 8px;
+      background-color: white;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease-out;
+      
+    }
+    .accordion:after {
+      content: "\02795"; /* Unicode character for "plus" sign (+) */
+      font-size: 13px;
+      color: #777;
+      float: right;
+      margin-left: 5px;
+    }
+
+    .active:after {
+      content: "\2796"; /* Unicode character for "minus" sign (-) */
     }
   }
 }
