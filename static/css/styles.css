@@ -135,6 +135,11 @@ form input:focus {
   background: #ddf7d1;
 }
 
+#chat #query-img div {
+  height: 275px;
+  width: 275px;
+}
+
 #chat #rooms-container {
   background: #1e1e2f;
 }

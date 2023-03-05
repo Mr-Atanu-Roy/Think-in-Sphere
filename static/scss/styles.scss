@@ -130,6 +130,12 @@ form {
 }
 
 #chat {
+  #query-img{
+    div{
+      height: 275px;
+      width: 275px;
+    }
+  }
   #rooms-container {
     background: $secondary-col;
   }
