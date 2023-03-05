@@ -23,6 +23,8 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 # Load OPENAI API key from environment variable
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
+
+
 # Create your views here.
 
 def home(request):
@@ -100,30 +102,34 @@ def chat(request, room_id):
                 result = message
                 
             else:
-                if cache.get(query):
-                    result = cache.get(query)                
+                if getRoom:
+                    if cache.get(query):
+                        result = cache.get(query)                
+                    else:
+                        prompt = f"The following is a conversation of a student with an AI assistant. The assistant is helpful, creative, clever, and very friendly and answers all the questions of the student very clearly.\n\nHuman: {query}\n\nAI:"
+                                    
+                        response = openai.Completion.create(
+                        model="text-davinci-003",
+                        prompt=prompt,
+                        max_tokens=2048,
+                        temperature=0.9,
+                        top_p=1,
+                        frequency_penalty=0.0,
+                        presence_penalty=0.6,
+                        stop=[" Human:", " AI:"]
+                        )
+                        
+                        result =  response["choices"][0]["text"]
+                        result = result.lstrip()
+                        cache.set(query, result) 
+                        
+                    newChat = UserRequestHistory(request=query, response=result)  
+                    newChat.save() 
+                    newChat.chatroom.add(getRoom)
+                    newChat.save()
                 else:
-                    prompt = f"The following is a conversation of a student with an AI assistant. The assistant is helpful, creative, clever, and very friendly and answers all the questions of the student very clearly.\n\nHuman: {query}\n\nAI:"
-                                  
-                    response = openai.Completion.create(
-                    model="text-davinci-003",
-                    prompt=prompt,
-                    max_tokens=2048,
-                    temperature=0.9,
-                    top_p=1,
-                    frequency_penalty=0.0,
-                    presence_penalty=0.6,
-                    stop=[" Human:", " AI:"]
-                    )
-                    
-                    result =  response["choices"][0]["text"]
-                    result = result.lstrip()
-                    cache.set(query, result) 
-                    
-                newChat = UserRequestHistory(request=query, response=result)  
-                newChat.save() 
-                newChat.chatroom.add(getRoom)
-                newChat.save()
+                    print("No room selected")
+                    messages.error(request, "No room selected")
 
         elif request.method == "POST" and "voice-input" in request.POST:
             r = sr.Recognizer()
@@ -139,26 +145,30 @@ def chat(request, room_id):
                     messages.error(request, message)
                     result = message
                 else:
-                    if cache.get(query):
-                        result = cache.get(query)
-                    else:
-                        prompt = f"The following is a conversation of a student with an AI assistant. The assistant is helpful, creative, clever, and very friendly and answers all the questions of the student very clearly.\n\nHuman: {query}\n\nAI:"
-                            
-                        response = openai.Completion.create(
-                        model="text-davinci-003",
-                        prompt=prompt,
-                        max_tokens=2048,
-                        temperature=0.9,
-                        top_p=1,
-                        frequency_penalty=0.0,
-                        presence_penalty=0.6,
-                        stop=[" Human:", " AI:"]
-                        )
+                    if getRoom:
+                        if cache.get(query):
+                            result = cache.get(query)
+                        else:
+                            prompt = f"The following is a conversation of a student with an AI assistant. The assistant is helpful, creative, clever, and very friendly and answers all the questions of the student very clearly.\n\nHuman: {query}\n\nAI:"
+                                
+                            response = openai.Completion.create(
+                            model="text-davinci-003",
+                            prompt=prompt,
+                            max_tokens=2048,
+                            temperature=0.9,
+                            top_p=1,
+                            frequency_penalty=0.0,
+                            presence_penalty=0.6,
+                            stop=[" Human:", " AI:"]
+                            )
 
-                        result =  response["choices"][0]["text"]
-                        result = result.lstrip()
-                        cache.set(query, result)
-                        
+                            result =  response["choices"][0]["text"]
+                            result = result.lstrip()
+                            cache.set(query, result)
+                    else:
+                        print("No room selected")
+                        messages.error(request, "No room selected")
+                    
                     newChat = UserRequestHistory(request=query, response=result)  
                     newChat.save() 
                     newChat.chatroom.add(getRoom)
