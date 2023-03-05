@@ -7,6 +7,9 @@ from accounts.models import User, OTP, UserProfile
 from core.models import UserRequestHistory
 from accounts.utils import current_time
 
+from django.db.models import Count
+from django.db.models.functions import Trunc, TruncDate
+
 import datetime
 
 
@@ -155,6 +158,19 @@ def dashboard(request):
         searchHistory = UserRequestHistory.objects.filter(created_at__gte = last_month, chatroom__user=request.user).order_by('-created_at')
         searchHistoryCount = UserRequestHistory.objects.filter(created_at__gte = last_month).count()
         
+        no_searches = UserRequestHistory.objects.filter(created_at__gte=last_month, chatroom__user=request.user).annotate(date=TruncDate('created_at')).values('date').annotate(total=Count('id'))
+        chart_data = []
+        
+        if len(no_searches) > 0:
+            for item in no_searches:
+                date = item['date']
+                count = item['total']
+                
+                data = [date, count]
+                chart_data.append(data)
+    
+        context["chart_data"] = chart_data
+        
     except Exception as e:
         getProfile = None
         print(e)
@@ -182,9 +198,7 @@ def dashboard(request):
                 getProfile.save()
                 
                 messages.success(request, "Profile updated successfully")
-                
-            
-                
+                            
     except Exception as e:
         print(e)
     

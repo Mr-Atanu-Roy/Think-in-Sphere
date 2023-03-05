@@ -129,7 +129,7 @@
                         </div>
                     </div>
 
-                    <div class="accordion-box my-6">
+                    <div class="accordion-box my-8">
                         <button class="accordion active">You have searched {{searchHistoryCount}} times since last
                             30days</button>
 
@@ -144,9 +144,8 @@
                         </div>
                     </div>
 
-                    <div>
-                        <p class="text-gray-600 f-light mb-2.5 capitalize">check which items you searched for and how
-                            many times in last 30days</p>
+                    <div class="my-8">
+                        <p class="text-gray-600 f-light mb-2.5 capitalize">check which items you searched for and how many times in last 30days</p>
 
                         <div class="flex items-center bg-gray-200 rounded-md">
                             <div class="pl-2">
@@ -156,10 +155,14 @@
                                 class="w-full rounded-md bg-gray-200 text-gray-800 f-medium leading-tight focus:outline-none p-2.5"
                                 id="query-search" type="text" placeholder="Input Query">
                         </div>
-                        <div class="py-3 text-sm" id="query-search-result">
+                        <div class="py-3 text-sm" id="query-search-result" style="max-height: 250px;">
                         </div>
                     </div>
 
+                    <div class="py-8">
+                        <p class="text-gray-600 f-light mb-2.5 capitalize">You search per day graph is shown below</p>
+                        <div id="chart_div"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -170,6 +173,7 @@
 {% include '../blocks/dismisable-alert.html' %}
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
     //accordion controls
     var acc = document.getElementsByClassName("accordion");
@@ -226,6 +230,34 @@
 
         });
     });
+
+    //google charts
+    google.charts.load('current', { packages: ['corechart', 'bar'] });
+    google.charts.setOnLoadCallback(drawStacked);
+
+    function drawStacked() {
+        var data = google.visualization.arrayToDataTable([
+            ['Date', 'Searches'],
+            {% for item in chart_data %}
+            ['{{ item.0|date:"d-m-Y" }}', {{ item.1 }}],
+            {% endfor %}
+        ]);
+    
+        var options = {
+            title: 'Search Count In last 30 Days',
+            isStacked: true,
+            hAxis: {
+                title: 'Date',
+                format: 'd-m-Y',
+            },
+            vAxis: {
+                title: 'Searches'
+            }
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
 
 </script>
 
