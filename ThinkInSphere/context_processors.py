@@ -1,7 +1,9 @@
 from core.models import ChatRoom
+import os
 
 def my_context(request):
     context = {
+        "RECAPTCHA_PUBLIC_KEY" : os.environ.get('RECAPTCHA_PUBLIC_KEY'),
         "user_fname" : "Anonymus",
         "user_email" : "anonymus@example.com",
     }

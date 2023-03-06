@@ -8,12 +8,15 @@ from core.models import UserRequestHistory
 from accounts.utils import current_time
 
 from django.db.models import Count
-from django.db.models.functions import Trunc, TruncDate
+from django.db.models.functions import TruncDate
 
 import datetime
 
+from accounts.utils import check_recaptcha
+
 
 # Create your views here.
+@check_recaptcha
 def signin(request):
     context = {
         "fname": "",
@@ -43,23 +46,24 @@ def signin(request):
                 context['password'] = password
                 context['cpassword'] = cpassword
 
-                if email != "":
+                if not email.isspace():
                     if User.objects.filter(email = email).first() :
                         messages.error(request, "An account already exists with this email")
                     else:
-                        if fname != "" and lname != "" and email != "" and password != "" and cpassword != "":
+                        if (not fname.isspace()) and (not lname.isspace()) and (not password.isspace()) and (not cpassword.isspace()):
                             if password == cpassword:
-                                newUser = User.objects.create_user(email=email, password=password)
-                                newUser.first_name = fname
-                                newUser.last_name = lname
-                                newUser.save()
-                                
-                                request.session['user_email'] = email
-                                
-                                context['fname'] = context['lname'] = context['email'] = context['password'] = context['cpassword'] = ""
-                
-                                messages.success(request, "Account created successfully. Check your email for OTP")
-                                return redirect('email-verification')
+                                if request.recaptcha_is_valid:
+                                    newUser = User.objects.create_user(email=email, password=password)
+                                    newUser.first_name = fname
+                                    newUser.last_name = lname
+                                    newUser.save()
+                                    
+                                    request.session['user_email'] = email
+                                    
+                                    context['fname'] = context['lname'] = context['email'] = context['password'] = context['cpassword'] = ""
+                    
+                                    messages.success(request, "Account created successfully. Check your email for OTP")
+                                    return redirect('email-verification')
                             else:
                                 messages.error(request, "Your passwords do not match")
                         else:
@@ -70,7 +74,7 @@ def signin(request):
     return render(request, './accounts/signin.html', context)
 
 
-
+@check_recaptcha
 def login(request):
     email = password = ""
     context = {
@@ -92,30 +96,31 @@ def login(request):
                 context["email"] = email
                 context["password"] = password
                 
-                if email != "" and password != "":
-                    try:
-                        checkUser = User.objects.get(email=email)
-                        user = auth.authenticate(email = email, password = password)
-                        if user is not None:
-                            if not checkUser.is_verified:                                
-                                messages.warning(request, "Your email is not verified. Please verify it")
-                            
-                            auth.login(request, user)
-                            messages.success(request, "you are successfully logged in")
-                            
-                            context["email"] = context["password"] = ""
-                            
-                            if request.GET.get('next') != None:
-                                return redirect(request.GET.get('next'))
-                            
-                            return redirect('dashboard')
-                        else:
-                            messages.error(request, "Invalid credentials. Please check your email and password")
-                    except User.DoesNotExist:
-                        messages.error(request, "No account exists with this email address")  
-                    except Exception as e:
-                        print(e)
-                        messages.error(request, "Something went wrong")  
+                if (not email.isspace()) and (not password.isspace()):
+                    if request.recaptcha_is_valid:
+                        try:
+                            checkUser = User.objects.get(email=email)
+                            user = auth.authenticate(email = email, password = password)
+                            if user is not None:
+                                if not checkUser.is_verified:                                
+                                    messages.warning(request, "Your email is not verified. Please verify it")
+                                
+                                auth.login(request, user)
+                                messages.success(request, "you are successfully logged in")
+                                
+                                context["email"] = context["password"] = ""
+                                
+                                if request.GET.get('next') != None:
+                                    return redirect(request.GET.get('next'))
+                                
+                                return redirect('dashboard')
+                            else:
+                                messages.error(request, "Invalid credentials. Please check your email and password")
+                        except User.DoesNotExist:
+                            messages.error(request, "No account exists with this email address")  
+                        except Exception as e:
+                            print(e)
+                            messages.error(request, "Something went wrong")  
                                         
                 else:
                     messages.error(request, "Email and password are required")
@@ -241,7 +246,7 @@ def email_verification(request):
             email = email.lstrip()
             email = email.rstrip()
                             
-            if email != "":
+            if not email.isspace():
                 
                 try:
                     getUser = User.objects.get(email=email)
@@ -265,7 +270,7 @@ def email_verification(request):
             otp = otp.lstrip()
             otp = otp.rstrip()
             
-            if otp != "":
+            if not otp.isspace():
                 try:
                     if request.user.is_authenticated:
                         getUser = request.user
@@ -331,7 +336,7 @@ def reset_password(request):
             
         if request.method == "POST" and "send-otp" in request.POST:
             email = request.POST.get("email")
-            if email != "":
+            if not email.isspace():
                 try:
                     getUser = User.objects.get(email=email)
                     newOTP = OTP(user=getUser, purpose="reset_password")
@@ -354,7 +359,7 @@ def reset_password(request):
             password = request.POST.get("password")
             cpassword = request.POST.get("cpassword")
             
-            if otp != "" and password !="" and cpassword != "":
+            if (not otp.isspace()) and (not password.isspace()) and (not cpassword.isspace()):
                 if password == cpassword:                    
                     try:
                         getUser = User.objects.get(email=email)

@@ -6,6 +6,14 @@ from django.db import models
 import datetime
 import pytz
 
+from functools import wraps
+
+from django.contrib import messages
+import requests
+import os
+
+
+
 # Get the timezone object for the timezone specified in settings.py
 tz = pytz.timezone(settings.TIME_ZONE)
 
@@ -54,3 +62,31 @@ def check_str_special(string):
         return True
     else:
         return False
+
+
+def check_recaptcha(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        try:
+            request.recaptcha_is_valid = None
+            if request.method == 'POST':
+                recaptcha_response = request.POST.get('g-recaptcha-response')
+                print(os.environ.get('RECAPTCHA_PRIVATE_KEY'))
+                data = {
+                    'secret': os.environ.get('RECAPTCHA_PRIVATE_KEY'),
+                    'response': recaptcha_response
+                }
+                r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+                result = r.json()
+                print(result)
+                if result['success']:
+                    request.recaptcha_is_valid = True
+                else:
+                    request.recaptcha_is_valid = False
+                    messages.error(request, 'Invalid reCAPTCHA. Please try again.')
+            return view_func(request, *args, **kwargs)
+        except Exception as e:
+            print(e)
+    return _wrapped_view
+
+
