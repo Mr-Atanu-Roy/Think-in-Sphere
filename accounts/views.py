@@ -3,18 +3,16 @@ from django.contrib.auth.models import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+import os
+import datetime
+
 from accounts.models import User, OTP, UserProfile
 from core.models import UserRequestHistory
-from accounts.utils import current_time
-
 from django.db.models import Count
 from django.db.models.functions import TruncDate
 
-import datetime
+from accounts.utils import current_time, check_recaptcha
 
-from accounts.utils import check_recaptcha
-
-import os
 RECAPTCHA_PUBLIC_KEY = os.environ.get("RECAPTCHA_PUBLIC_KEY")
 
 
