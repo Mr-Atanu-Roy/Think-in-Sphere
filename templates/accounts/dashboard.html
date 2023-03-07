@@ -382,8 +382,8 @@
         var data = google.visualization.arrayToDataTable([
             ['Date', 'Bot Searches', 'Course Searches', 'Topic Searches'],
             {% for item in chart_data %}
-    ['{{ item.0|date:"d-m-Y" }}', {{ item.1 }}, {{ item.2}}, {{ item.3}}],
-        {% endfor %}
+                ['{{ item.0|date:"d-m-Y" }}', {{ item.1 }}, {{ item.2}}, {{ item.3}}],
+            {% endfor %}
           
         ]);
 

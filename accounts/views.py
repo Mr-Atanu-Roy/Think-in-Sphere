@@ -172,18 +172,12 @@ def dashboard(request):
         topic_searchHistory = course_topic_search.filter(type="topic").values('request').annotate(count=Count('request'))
         topic_searchHistoryCount = topic_searchHistory.count()
         
-        #this data is for graph
-        no_searches_chat = search.annotate(date=TruncDate('created_at')).values('date').annotate(total=Count('id'))
-        no_searches_course = course_topic_search.filter(type="subject").annotate(date=TruncDate('created_at')).values('date').annotate(total=Count('id'))
-        no_searches_topic = course_topic_search.filter(type="topic").annotate(date=TruncDate('created_at')).values('date').annotate(total=Count('id'))
-        
         '''For pie graph'''
         courseHistoryCount = course_topic_search.filter(type="subject").count()
         topicHistoryCount = course_topic_search.filter(type="topic").count()
         
         '''Get users data for compairing'''
         previous_week = last_week - datetime.timedelta(days=7)
-        print(last_week, previous_week)
         #getting chat searches
         this_week_chat = searchHistoryCount
         previous_week_chat = UserRequestHistory.objects.filter(created_at__range=(previous_week, last_week), chatroom__user=request.user).count()
@@ -216,43 +210,17 @@ def dashboard(request):
         context["topic_percent"] = topic_percent
 
         chart_data = []
-        # inserting chats
-        if len(no_searches_chat) > 0:
-            for item in no_searches_chat:
-                date = item['date']
-                chat_count = item['total']
-                
-                data = [date, chat_count, 0, 0]
-                chart_data.append(data)
-        print(chart_data, "\n\n")
-        #inserting course
-        if len(no_searches_course) > 0:
-            for item in no_searches_course:
-                date = item['date']
-                course_count = item['total']
-                for chat in chart_data:
-                    print(chat,  "========")
-                    if date == chat[0]:
-                        print(date, chat[0],  "+++++")
-                        chat[2] = course_count
-                        print(chat)
-                    else:
-                        data = [date, 0, course_count, 0]
-                        chart_data.append(data)
-        print(chart_data, "\n\n")
-        #inserting topics
-        if len(no_searches_topic) > 0:
-            for item in no_searches_topic:
-                date = item['date']
-                topic_count = item['total']
-                for chat in chart_data:
-                    if date == chat[0]:
-                        chat[3] = topic_count    
-                    else:
-                        data = [date, 0, topic_count, 0]
-                        chart_data.append(data)
+        check_date = last_week
+        while (check_date <= current_time):
+            data = [check_date, 0, 0, 0]
+            chat = UserRequestHistory.objects.filter(created_at__date=check_date, chatroom__user=request.user).count()
+            course = UserCourseHistory.objects.filter(created_at__date=check_date, type="subject", user=request.user).count()
+            topic = UserCourseHistory.objects.filter(created_at__date=check_date, type="topic", user=request.user).count()
             
-        print(chart_data)
+            data[1], data[2], data[3] = chat, course, topic
+            chart_data.append(data)
+            
+            check_date += datetime.timedelta(days=1)
     
         context["chart_data"] = chart_data
         
