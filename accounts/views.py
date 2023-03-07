@@ -265,6 +265,10 @@ def dashboard(request):
     context["course_searchHistoryCount"] = course_searchHistoryCount
     context["topic_searchHistory"] = topic_searchHistory
     context["topic_searchHistoryCount"] = topic_searchHistoryCount
+    
+    context["courseHistoryCount"] = course_topic_search.filter(type="subject").count()
+    context["topicHistoryCount"] = course_topic_search.filter(type="topic").count()
+    
         
     return render(request, './accounts/dashboard.html', context)
 
