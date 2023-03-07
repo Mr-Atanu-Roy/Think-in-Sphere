@@ -203,7 +203,10 @@
 
                     <div class="py-8">
                         <p class="text-gray-600 f-light mb-2.5 capitalize">You search per day graph is shown below</p>
-                        <div id="chart_div"></div>
+                        <div class="grid grid-cols-6 gap-3">
+                            <div id="piechart" class="col-span-2 flex items-center justify-center"></div>
+                            <div id="chart_div" class="col-span-4"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -274,11 +277,32 @@
     });
 
     //google charts
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawPieChart);
+
+    function drawPieChart() {
+
+    var data = google.visualization.arrayToDataTable([
+        ['Task', 'Searches in last 7days'],
+        ['ChatBot',     {{searchHistoryCount}}],
+        ['Course',      {{course_searchHistoryCount}}],
+        ['Topic',  {{topic_searchHistoryCount}}],
+    ]);
+
+    var options = {
+        title: 'Your Activities since {{last_week | date}}'
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+    chart.draw(data, options);
+    }
+
+
     google.charts.load('current', {'packages':['bar']});
-    google.charts.setOnLoadCallback(drawChart);
-    {% comment %} google.charts.load('current', { packages: ['corechart', 'bar'] });
-    google.charts.setOnLoadCallback(drawStacked); {% endcomment %}
-    function drawChart() {
+    google.charts.setOnLoadCallback(drawBarChart);
+    function drawBarChart() {
         var data = google.visualization.arrayToDataTable([
           ['Date', 'Bot Searches', 'Course Searches', 'Topic Searches'],
           {% for item in chart_data %}
@@ -288,9 +312,6 @@
         ]);
 
         var options = {
-          chart: {
-            title: 'Searches In Last 7 Days',
-          },
           bars: 'vertical',
           vAxis: {format: 'decimal'},
           height: 400,
