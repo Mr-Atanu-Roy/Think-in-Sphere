@@ -54,7 +54,7 @@ def signin(request):
                     else:
                         if (not fname.isspace()) and (not lname.isspace()) and (not password.isspace()) and (not cpassword.isspace()):
                             if check_str_special(fname) or check_str_special(lname):
-                                messages.error(request, "Invalid names")
+                                messages.error(request, "Special charecters are not allowed")
                             else:
                                 if password == cpassword:
                                     if request.recaptcha_is_valid:
