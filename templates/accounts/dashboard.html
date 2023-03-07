@@ -274,32 +274,43 @@
     });
 
     //google charts
-    google.charts.load('current', { packages: ['corechart', 'bar'] });
-    google.charts.setOnLoadCallback(drawStacked);
-
-    function drawStacked() {
+    google.charts.load('current', {'packages':['bar']});
+    google.charts.setOnLoadCallback(drawChart);
+    {% comment %} google.charts.load('current', { packages: ['corechart', 'bar'] });
+    google.charts.setOnLoadCallback(drawStacked); {% endcomment %}
+    function drawChart() {
         var data = google.visualization.arrayToDataTable([
-            ['Date', 'Searches'],
-            {% for item in chart_data %}
-            ['{{ item.0|date:"d-m-Y" }}', {{ item.1 }}],
-            {% endfor %}
+          ['Date', 'Bot Searches', 'Course Searches', 'Topic Searches'],
+          {% for item in chart_data %}
+            ['{{ item.0|date:"d-m-Y" }}', {{ item.1 }}, {{item.2}}, {{item.3}}],
+          {% endfor %}
+          
         ]);
-    
+
         var options = {
-            title: 'Search Count In last 7 Days',
-            isStacked: true,
-            hAxis: {
-                title: 'Date',
-                format: 'd-m-Y',
-            },
-            vAxis: {
-                title: 'Searches'
-            }
+          chart: {
+            title: 'Searches In Last 7 Days',
+          },
+          bars: 'vertical',
+          vAxis: {format: 'decimal'},
+          height: 400,
+          colors: ['#1b9e77', '#d95f02', '#7570b3']
         };
 
-        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-    }
+        var chart = new google.charts.Bar(document.getElementById('chart_div'));
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+
+        var btns = document.getElementById('btn-group');
+
+        btns.onclick = function (e) {
+
+          if (e.target.tagName === 'BUTTON') {
+            options.vAxis.format = e.target.id === 'none' ? '' : e.target.id;
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+          }
+        }
+      }
 
 </script>
 

@@ -173,16 +173,49 @@ def dashboard(request):
         topic_searchHistoryCount = topic_searchHistory.count()
         
         #this data is for graph
-        no_searches = UserRequestHistory.objects.filter(created_at__gte=last_week, chatroom__user=request.user).annotate(date=TruncDate('created_at')).values('date').annotate(total=Count('id'))
+        no_searches_chat = search.annotate(date=TruncDate('created_at')).values('date').annotate(total=Count('id'))
+        no_searches_course = course_topic_search.filter(type="subject").annotate(date=TruncDate('created_at')).values('date').annotate(total=Count('id'))
+        no_searches_topic = course_topic_search.filter(type="topic").annotate(date=TruncDate('created_at')).values('date').annotate(total=Count('id'))
         
+
         chart_data = []
-        if len(no_searches) > 0:
-            for item in no_searches:
+        # inserting chats
+        if len(no_searches_chat) > 0:
+            for item in no_searches_chat:
                 date = item['date']
-                count = item['total']
+                chat_count = item['total']
                 
-                data = [date, count]
+                data = [date, chat_count, 0, 0]
                 chart_data.append(data)
+        print(chart_data, "\n\n")
+        #inserting course
+        if len(no_searches_course) > 0:
+            for item in no_searches_course:
+                date = item['date']
+                course_count = item['total']
+                for chat in chart_data:
+                    print(chat,  "========")
+                    if date == chat[0]:
+                        print(date, chat[0],  "+++++")
+                        chat[2] = course_count
+                        print(chat)
+                    else:
+                        data = [date, 0, course_count, 0]
+                        chart_data.append(data)
+        print(chart_data, "\n\n")
+        #inserting topics
+        if len(no_searches_topic) > 0:
+            for item in no_searches_topic:
+                date = item['date']
+                topic_count = item['total']
+                for chat in chart_data:
+                    if date == chat[0]:
+                        chat[3] = topic_count    
+                    else:
+                        data = [date, 0, topic_count, 0]
+                        chart_data.append(data)
+            
+        print(chart_data)
     
         context["chart_data"] = chart_data
         
