@@ -133,7 +133,7 @@ def login(request):
 def dashboard(request):
     fname = lname = dob = country = city = course = institute = ""
     searchHistory = course_searchHistory = topic_searchHistory = ""
-    searchHistoryCount = course_searchHistoryCount = topic_searchHistoryCount = 0
+    searchHistoryCount = course_searchHistoryCount = topic_searchHistoryCount = topicHistoryCount = courseHistoryCount = 0
     last_week = current_time - datetime.timedelta(days=7)
     context = {
         'fname': fname,
@@ -156,7 +156,7 @@ def dashboard(request):
         course = getProfile.course_name
         institute = getProfile.institute_name
         
-        '''Get user's data for statistics'''
+        '''Get user's data for statistics for last week'''
         #getting chatbot search
         search = UserRequestHistory.objects.filter(created_at__gte=last_week, chatroom__user=request.user)
         searchHistory = search.values('request').annotate(count=Count('request'))
@@ -177,6 +177,43 @@ def dashboard(request):
         no_searches_course = course_topic_search.filter(type="subject").annotate(date=TruncDate('created_at')).values('date').annotate(total=Count('id'))
         no_searches_topic = course_topic_search.filter(type="topic").annotate(date=TruncDate('created_at')).values('date').annotate(total=Count('id'))
         
+        '''For pie graph'''
+        courseHistoryCount = course_topic_search.filter(type="subject").count()
+        topicHistoryCount = course_topic_search.filter(type="topic").count()
+        
+        '''Get users data for compairing'''
+        previous_week = last_week - datetime.timedelta(days=7)
+        print(last_week, previous_week)
+        #getting chat searches
+        this_week_chat = searchHistoryCount
+        previous_week_chat = UserRequestHistory.objects.filter(created_at__range=(previous_week, last_week), chatroom__user=request.user).count()
+        
+        #getting course and topic search
+        previous_week_course_topic = UserCourseHistory.objects.filter(created_at__range=(previous_week, last_week), user=request.user)
+        #getting course search
+        this_week_course = course_topic_search.filter(type="subject").count()
+        previous_week_course = previous_week_course_topic.filter(type="subject").count()
+        
+        #getting topic search
+        this_week_topic = course_topic_search.filter(type="topic").count()
+        previous_week_topic = previous_week_course_topic.filter(type="topic").count()
+        
+        if this_week_chat > 0:
+            chat_percent = -int(((previous_week_chat-this_week_chat)/this_week_chat)*100)
+        else:
+            chat_percent = 0
+        if this_week_course > 0:
+            course_percent = -int(((previous_week_course-this_week_course)/this_week_course)*100)
+        else:
+            course_percent = 0
+        if this_week_topic > 0:
+            topic_percent = -int(((previous_week_topic-this_week_topic)/this_week_topic)*100)
+        else:
+            topic_percent = 0
+               
+        context["chat_percent"] = chat_percent
+        context["course_percent"] = course_percent
+        context["topic_percent"] = topic_percent
 
         chart_data = []
         # inserting chats
@@ -266,8 +303,8 @@ def dashboard(request):
     context["topic_searchHistory"] = topic_searchHistory
     context["topic_searchHistoryCount"] = topic_searchHistoryCount
     
-    context["courseHistoryCount"] = course_topic_search.filter(type="subject").count()
-    context["topicHistoryCount"] = course_topic_search.filter(type="topic").count()
+    context["courseHistoryCount"] = courseHistoryCount
+    context["topicHistoryCount"] = topicHistoryCount
     
         
     return render(request, './accounts/dashboard.html', context)

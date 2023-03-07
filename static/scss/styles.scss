@@ -49,7 +49,6 @@ $primary-bg: #ddf7d1;
   background-color: $secondary-col;
 }
 
-
 header {
   width: 100%;
   background: white;
@@ -152,8 +151,8 @@ form {
 }
 
 #chat {
-  #query-img{
-    div{
+  #query-img {
+    div {
       height: 275px;
       width: 275px;
     }
@@ -242,7 +241,6 @@ form {
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.2s ease-out;
-      
     }
     .accordion:after {
       content: "\02795"; /* Unicode character for "plus" sign (+) */
@@ -258,8 +256,26 @@ form {
   }
 }
 
-#course-topic{
-  .topic-headings{
+#course-topic {
+  .topic-headings {
     box-shadow: inset 0 -9px 0 0 $primary-bg;
   }
+}
+
+@keyframes fill {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(126deg);
+  }
+}
+#performance-box {
+ .box{
+  .percentage{
+    position: relative;
+    width: 150px;
+    height: 150px;
+  }
+ }  
 }
