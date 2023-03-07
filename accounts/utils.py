@@ -71,7 +71,6 @@ def check_recaptcha(view_func):
             request.recaptcha_is_valid = None
             if request.method == 'POST':
                 recaptcha_response = request.POST.get('g-recaptcha-response')
-                print(os.environ.get('RECAPTCHA_PRIVATE_KEY'))
                 data = {
                     'secret': os.environ.get('RECAPTCHA_PRIVATE_KEY'),
                     'response': recaptcha_response
