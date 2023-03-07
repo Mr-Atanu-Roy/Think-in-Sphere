@@ -14,11 +14,15 @@ import datetime
 
 from accounts.utils import check_recaptcha
 
+import os
+RECAPTCHA_PUBLIC_KEY = os.environ.get("RECAPTCHA_PUBLIC_KEY")
+
 
 # Create your views here.
 @check_recaptcha
 def signin(request):
     context = {
+        "RECAPTCHA_PUBLIC_KEY" : RECAPTCHA_PUBLIC_KEY,
         "fname": "",
         "lname": "",
         "email": "",
@@ -78,6 +82,7 @@ def signin(request):
 def login(request):
     email = password = ""
     context = {
+        "RECAPTCHA_PUBLIC_KEY" : RECAPTCHA_PUBLIC_KEY,
         "email": email,
         "password": password,
     }
