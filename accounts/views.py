@@ -11,7 +11,7 @@ from core.models import UserRequestHistory
 from django.db.models import Count
 from django.db.models.functions import TruncDate
 
-from accounts.utils import current_time, check_recaptcha
+from accounts.utils import current_time, check_recaptcha, check_str_special
 
 RECAPTCHA_PUBLIC_KEY = os.environ.get("RECAPTCHA_PUBLIC_KEY")
 
@@ -53,21 +53,25 @@ def signin(request):
                         messages.error(request, "An account already exists with this email")
                     else:
                         if (not fname.isspace()) and (not lname.isspace()) and (not password.isspace()) and (not cpassword.isspace()):
-                            if password == cpassword:
-                                if request.recaptcha_is_valid:
-                                    newUser = User.objects.create_user(email=email, password=password)
-                                    newUser.first_name = fname
-                                    newUser.last_name = lname
-                                    newUser.save()
-                                    
-                                    request.session['user_email'] = email
-                                    
-                                    context['fname'] = context['lname'] = context['email'] = context['password'] = context['cpassword'] = ""
-                    
-                                    messages.success(request, "Account created successfully. Check your email for OTP")
-                                    return redirect('email-verification')
+                            if check_str_special(fname) or check_str_special(lname):
+                                messages.error(request, "Invalid names")
                             else:
-                                messages.error(request, "Your passwords do not match")
+                                if password == cpassword:
+                                    if request.recaptcha_is_valid:
+                                        newUser = User.objects.create_user(email=email, password=password)
+                                        newUser.first_name = fname
+                                        newUser.last_name = lname
+                                        newUser.save()
+                                        
+                                        request.session['user_email'] = email
+                                        
+                                        context['fname'] = context['lname'] = context['email'] = context['password'] = context['cpassword'] = ""
+                        
+                                        messages.success(request, "Account created successfully. Check your email for OTP")
+                                        return redirect('email-verification')
+                                else:
+                                    messages.error(request, "Your passwords do not match")
+                                
                         else:
                             messages.error(request, "All fields are required")
                 else:
@@ -193,19 +197,22 @@ def dashboard(request):
             course = request.POST.get("course")
             institute = request.POST.get("institute")
             
-            if getProfile is not None:
-                user = request.user
-                user.first_name = fname
-                user.last_name = lname
-                user.save()
-                
-                getProfile.city = city
-                getProfile.country = country
-                getProfile.course_name = course
-                getProfile.institute_name = institute
-                getProfile.save()
-                
-                messages.success(request, "Profile updated successfully")
+            if check_str_special(fname) or check_str_special(lname) or check_str_special(country) or check_str_special(city) or check_str_special(course) or check_str_special(institute):
+                messages.success(request, "Special charecters are not allowed")
+            else:
+                if getProfile is not None:
+                    user = request.user
+                    user.first_name = fname
+                    user.last_name = lname
+                    user.save()
+                    
+                    getProfile.city = city
+                    getProfile.country = country
+                    getProfile.course_name = course
+                    getProfile.institute_name = institute
+                    getProfile.save()
+                    
+                    messages.success(request, "Profile updated successfully")
                             
     except Exception as e:
         print(e)
@@ -246,8 +253,7 @@ def email_verification(request):
                    
         if request.method == "POST" and "send-otp" in request.POST:
             email = request.POST.get("email")
-            email = email.lstrip()
-            email = email.rstrip()
+            email = email.strip()
                             
             if not email.isspace():
                 
@@ -270,43 +276,46 @@ def email_verification(request):
 
         elif request.method == "POST" and "verify-email" in request.POST:
             otp = request.POST.get("otp")
-            otp = otp.lstrip()
-            otp = otp.rstrip()
+            otp = otp.strip()
             
             if not otp.isspace():
-                try:
-                    if request.user.is_authenticated:
-                        getUser = request.user
-                    else:
-                        getUser = User.objects.get(email=email)
-                    if not getUser.is_verified:
-                        ten_min_ago = current_time - datetime.timedelta(minutes=10)
-                        checkOTP = OTP.objects.filter(otp=otp, user=getUser, is_expired=False, purpose="email_verification", created_at__gte=ten_min_ago).first()
-                        if checkOTP:
-                            getUser.is_verified = True
-                            getUser.save()
-                            
-                            checkOTP.is_expired = True
-                            checkOTP.save()
-                            messages.success(request, "Email verified successfully.")
-                            
-                            if request.session.get('user_email'):
-                                del request.session['user_email']
-                            
-                            if request.user.is_authenticated:
-                                return redirect('dashboard')
-                            
-                            return redirect('login')
+                if otp.isnumeric():
+                    try:
+                        if request.user.is_authenticated:
+                            getUser = request.user
                         else:
-                            messages.error(request, "Invalid OTP. OTP may get expired")
-                    else:
-                        messages.warning(request, "This account is already verified")
-                        return redirect('login')
-                except User.DoesNotExist:
-                    messages.error(request, "No account exists with this email address")  
-                except Exception as e:
-                    print(e)
-                    messages.error(request, "Something went wrong")  
+                            getUser = User.objects.get(email=email)
+                        if not getUser.is_verified:
+                            ten_min_ago = current_time - datetime.timedelta(minutes=10)
+                            checkOTP = OTP.objects.filter(otp=otp, user=getUser, is_expired=False, purpose="email_verification", created_at__gte=ten_min_ago).first()
+                            if checkOTP:
+                                getUser.is_verified = True
+                                getUser.save()
+                                
+                                checkOTP.is_expired = True
+                                checkOTP.save()
+                                messages.success(request, "Email verified successfully.")
+                                
+                                if request.session.get('user_email'):
+                                    del request.session['user_email']
+                                
+                                if request.user.is_authenticated:
+                                    return redirect('dashboard')
+                                
+                                return redirect('login')
+                            else:
+                                messages.error(request, "Invalid OTP. OTP may get expired")
+                        else:
+                            messages.warning(request, "This account is already verified")
+                            return redirect('login')
+                    except User.DoesNotExist:
+                        messages.error(request, "No account exists with this email address")  
+                    except Exception as e:
+                        print(e)
+                        messages.error(request, "Something went wrong")
+                else:
+                    messages.error(request, "Invalid otp")
+                     
                     
             else:
                 messages.error(request, "OTP is required")
@@ -363,32 +372,35 @@ def reset_password(request):
             cpassword = request.POST.get("cpassword")
             
             if (not otp.isspace()) and (not password.isspace()) and (not cpassword.isspace()):
-                if password == cpassword:                    
-                    try:
-                        getUser = User.objects.get(email=email)
-                        ten_min_ago = current_time - datetime.timedelta(minutes=10)
-                        checkOTP = OTP.objects.filter(otp=otp, user=getUser, is_expired=False, purpose="reset_password", created_at__gte=ten_min_ago).first()
-                        if checkOTP:                        
-                            checkOTP.is_expired = True
-                            checkOTP.save()
-                            
-                            getUser.set_password(password)
-                            getUser.save()
-                            
-                            messages.success(request, "Password reset successfull. Now please login")
-                            return redirect('login')
+                if otp.isnumeric():
+                    if password == cpassword:                    
+                        try:
+                            getUser = User.objects.get(email=email)
+                            ten_min_ago = current_time - datetime.timedelta(minutes=10)
+                            checkOTP = OTP.objects.filter(otp=otp, user=getUser, is_expired=False, purpose="reset_password", created_at__gte=ten_min_ago).first()
+                            if checkOTP:                        
+                                checkOTP.is_expired = True
+                                checkOTP.save()
+                                
+                                getUser.set_password(password)
+                                getUser.save()
+                                
+                                messages.success(request, "Password reset successfull. Now please login")
+                                return redirect('login')
 
-                        else:
-                            messages.error(request, "Invalid OTP. OTP may get expired")
-                            
-                    except User.DoesNotExist:
-                        messages.error(request, "No account exists with this email address")  
-                    except Exception as e:
-                        print(e)
-                        messages.error(request, "Something went wrong")  
-                    
+                            else:
+                                messages.error(request, "Invalid OTP. OTP may get expired")
+                                
+                        except User.DoesNotExist:
+                            messages.error(request, "No account exists with this email address")  
+                        except Exception as e:
+                            print(e)
+                            messages.error(request, "Something went wrong")  
+                        
+                    else:
+                        messages.error(request, "Passwords do not match")
                 else:
-                    messages.error(request, "Passwords do not match")
+                    messages.error(request, "Invalid OTP")
             
             else:
                 messages.error(request, "OTP, Passwords are required")
