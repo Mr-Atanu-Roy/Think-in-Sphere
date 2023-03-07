@@ -198,7 +198,7 @@ def dashboard(request):
             institute = request.POST.get("institute")
             
             if check_str_special(fname) or check_str_special(lname) or check_str_special(country) or check_str_special(city) or check_str_special(course) or check_str_special(institute):
-                messages.success(request, "Special charecters are not allowed")
+                messages.error(request, "Special charecters are not allowed")
             else:
                 if getProfile is not None:
                     user = request.user
