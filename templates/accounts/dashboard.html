@@ -129,19 +129,56 @@
                         </div>
                     </div>
 
-                    <div class="accordion-box my-8">
+                    <div class="accordion-box mt-8">
                         <button class="accordion">Your ChatBot records {{searchHistoryCount}} searches in last
                             7 days <span class="f-light text-sm">(click to expand)</span></button>
 
                         <div class="panel">
-                            <p class="f-light mb-2.5 text-gray-600 capitalize">Your searched items were</p>
+                            <p class="f-light mb-2.5 text-gray-600 capitalize">Your unique searches were</p>
                             <div class="flex items-center justify-start flex-wrap">
                                 {% if searchHistoryCount == 0 %}
-                                <div class="text-sm p-1.5 mr-1.5 mb-2 text-red-600">You have not searched for anything from {{lastMonth | date}}
+                                <div class="text-sm p-1.5 mr-1.5 mb-2 text-red-600">You have not searched for anything from {{last_week | date}}
                                 </div>
                                 {% else %}
                                 {% for item in searchHistory %}
-                                <div class="text-sm p-1.5 mr-1.5 mb-2 bg-red-100">{{item.request | truncatewords:5}}
+                                <div class="text-sm p-2 mr-1.5 mb-2 bg-red-100 flex items-center justify-center">
+                                    <div class="w-5 h-5 f-medium text-xs rounded-full flex items-center justify-center mr-1" style="background-color: #97c680;">{{item.count}}</div>
+                                    <span>{{item.request | truncatewords:5}}</span>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-box mb-8">
+                        <button class="accordion">You looked up for {{course_searchHistoryCount}} courses and {{topic_searchHistoryCount}} topics in last
+                            7 days <span class="f-light text-sm">(click to expand)</span></button>
+
+                        <div class="panel">
+                            <p class="f-light mb-2 text-gray-600 capitalize">courses you looked up for</p>
+                            <div class="flex items-center justify-start flex-wrap">
+                                {% if course_searchHistoryCount == 0 %}
+                                <div class="text-sm p-1.5 mr-1.5 mb-2 text-red-600">You have not learned any course from {{last_week | date}}
+                                </div>
+                                {% else %}
+                                {% for item in course_searchHistory %}
+                                <div class="text-sm p-2 mr-1.5 mb-2 bg-red-100 flex items-center justify-center">
+                                    <div class="w-5 h-5 f-medium text-xs rounded-full flex items-center justify-center mr-1" style="background-color: #97c680;">{{item.count}}</div>
+                                    <span>{{item.request}}</span>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            <p class="f-light mb-2 text-gray-600 capitalize mt-3.5">topics you looked up for</p>
+                            <div class="flex items-center justify-start flex-wrap">
+                                {% if topic_searchHistoryCount == 0 %}
+                                <div class="text-sm p-1.5 mr-1.5 mb-2 text-red-600">You have not learned any topics from {{last_week | date}}
+                                </div>
+                                {% else %}
+                                {% for item in topic_searchHistory %}
+                                <div class="text-sm p-2 mr-1.5 mb-2 bg-red-100 flex items-center justify-center">
+                                    <div class="w-5 h-5 f-medium text-xs rounded-full flex items-center justify-center mr-1" style="background-color: #97c680;">{{item.count}}</div>
+                                    <span>{{item.request}}</span>
                                 </div>
                                 {% endfor %}
                                 {% endif %}

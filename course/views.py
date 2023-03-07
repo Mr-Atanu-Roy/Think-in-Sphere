@@ -94,7 +94,6 @@ def courseTopicView(request, topic):
     
     try:
         if not topic.isspace():
-            topic = topic.lower()
 
             if cache.get(topic):
                 notes, summery, question = cache.get(topic)["notes"], cache.get(topic)["summery"], cache.get(topic)["question"]
@@ -107,6 +106,10 @@ def courseTopicView(request, topic):
                     "question" : question,
                 }
                 cache.set(topic, cache_dict)
+                
+        topic = topic.lower()
+        newTopic = UserCourseHistory(user=request.user, request=topic, type="topic")
+        newTopic.save()
                 
     except Exception as e:
         print(e)

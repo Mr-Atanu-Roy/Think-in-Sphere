@@ -29,7 +29,7 @@ class UserRequestHistory(BaseModel):
     
     chatroom = models.ManyToManyField(ChatRoom)
     request = models.TextField()
-    response = models.TextField(default="generated course")
+    response = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.request

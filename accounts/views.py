@@ -3,12 +3,13 @@ from django.contrib.auth.models import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from accounts.models import User, OTP, UserProfile
 from core.models import UserRequestHistory
+from course.models import UserCourseHistory
+from accounts.models import User, OTP, UserProfile
 from accounts.utils import current_time
 
 from django.db.models import Count
-from django.db.models.functions import Trunc, TruncDate
+from django.db.models.functions import TruncDate
 
 import datetime
 
@@ -131,7 +132,8 @@ def login(request):
 @login_required(login_url="/auth/login")
 def dashboard(request):
     fname = lname = dob = country = city = course = institute = ""
-    searchHistory = searchHistoryCount = ""
+    searchHistory = course_searchHistory = topic_searchHistory = ""
+    searchHistoryCount = course_searchHistoryCount = topic_searchHistoryCount = 0
     last_week = current_time - datetime.timedelta(days=7)
     context = {
         'fname': fname,
@@ -155,15 +157,25 @@ def dashboard(request):
         institute = getProfile.institute_name
         
         '''Get user's data for statistics'''
+        #getting chatbot search
         search = UserRequestHistory.objects.filter(created_at__gte=last_week, chatroom__user=request.user)
         searchHistory = search.values('request').annotate(count=Count('request'))
-            
         searchHistoryCount = search.count()
+        
+        #getting course and topic search
+        course_topic_search = UserCourseHistory.objects.filter(created_at__gte=last_week, user=request.user)
+        #getting course search
+        course_searchHistory = course_topic_search.filter(type="subject").values('request').annotate(count=Count('request'))
+        course_searchHistoryCount = course_searchHistory.count()
+        
+        #getting topic search
+        topic_searchHistory = course_topic_search.filter(type="topic").values('request').annotate(count=Count('request'))
+        topic_searchHistoryCount = topic_searchHistory.count()
         
         #this data is for graph
         no_searches = UserRequestHistory.objects.filter(created_at__gte=last_week, chatroom__user=request.user).annotate(date=TruncDate('created_at')).values('date').annotate(total=Count('id'))
-        chart_data = []
         
+        chart_data = []
         if len(no_searches) > 0:
             for item in no_searches:
                 date = item['date']
@@ -216,6 +228,10 @@ def dashboard(request):
     context["last_week"] = last_week
     context["searchHistory"] = searchHistory
     context["searchHistoryCount"] = searchHistoryCount
+    context["course_searchHistory"] = course_searchHistory
+    context["course_searchHistoryCount"] = course_searchHistoryCount
+    context["topic_searchHistory"] = topic_searchHistory
+    context["topic_searchHistoryCount"] = topic_searchHistoryCount
         
     return render(request, './accounts/dashboard.html', context)
 
