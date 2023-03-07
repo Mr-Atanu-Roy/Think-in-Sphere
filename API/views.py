@@ -11,21 +11,21 @@ from django.template.defaultfilters import truncatewords
 from .utils import courses_list
 # Create your views here.
 
-class DashboardSearchQueryView(View):
+class DashboardDashboardSearchQueryView(View):
     '''Handels dashboard search ajax request'''
     
     def get(self, request):
         try:
             query = request.GET.get('query')
-            
-            if query.isspace() == False:
-                last_month = current_time - datetime.timedelta(days=30)
-                result = UserRequestHistory.objects.filter(chatroom__user=request.user, created_at__gte=last_month, request__icontains=query).order_by('-created_at')
-            
-                data = [{'id': obj.id, 'request': truncatewords(obj.request, 13), 'created_at' : naturalday(obj.created_at)} for obj in result]
-                return JsonResponse(data, safe=False)
-            
-            return JsonResponse("", safe=False)
+            if query:
+                if query.isspace() == False:
+                    last_month = current_time - datetime.timedelta(days=30)
+                    result = UserRequestHistory.objects.filter(chatroom__user=request.user, created_at__gte=last_month, request__icontains=query).order_by('-created_at')
+                
+                    data = [{'id': obj.id, 'request': truncatewords(obj.request, 13), 'created_at' : naturalday(obj.created_at)} for obj in result]
+                    return JsonResponse(data, safe=False)
+                
+                return JsonResponse("", safe=False)
             
         except Exception as e:
             print(e)

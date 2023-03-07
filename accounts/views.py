@@ -132,7 +132,7 @@ def login(request):
 def dashboard(request):
     fname = lname = dob = country = city = course = institute = ""
     searchHistory = searchHistoryCount = ""
-    last_month = current_time - datetime.timedelta(days=30)
+    last_week = current_time - datetime.timedelta(days=7)
     context = {
         'fname': fname,
         'lname': lname,
@@ -155,10 +155,13 @@ def dashboard(request):
         institute = getProfile.institute_name
         
         '''Get user's data for statistics'''
-        searchHistory = UserRequestHistory.objects.filter(created_at__gte = last_month, chatroom__user=request.user).order_by('-created_at')
-        searchHistoryCount = UserRequestHistory.objects.filter(created_at__gte = last_month).count()
+        search = UserRequestHistory.objects.filter(created_at__gte=last_week, chatroom__user=request.user)
+        searchHistory = search.values('request').annotate(count=Count('request'))
+            
+        searchHistoryCount = search.count()
         
-        no_searches = UserRequestHistory.objects.filter(created_at__gte=last_month, chatroom__user=request.user).annotate(date=TruncDate('created_at')).values('date').annotate(total=Count('id'))
+        #this data is for graph
+        no_searches = UserRequestHistory.objects.filter(created_at__gte=last_week, chatroom__user=request.user).annotate(date=TruncDate('created_at')).values('date').annotate(total=Count('id'))
         chart_data = []
         
         if len(no_searches) > 0:
@@ -210,7 +213,7 @@ def dashboard(request):
     context["course"] = course
     context["institute"] = institute
     
-    context["lastMonth"] = last_month
+    context["last_week"] = last_week
     context["searchHistory"] = searchHistory
     context["searchHistoryCount"] = searchHistoryCount
         
