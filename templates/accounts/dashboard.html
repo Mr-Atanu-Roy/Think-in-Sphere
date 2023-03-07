@@ -114,9 +114,9 @@
                                 {{user_fname | title}}'s
                                 {% endif %}
                                 Statistics</p>
-                            <p class="f-light text-lg">Here you can see your performance and activity data of last 30
+                            <p class="f-light text-lg">Here you can see your performance and activity data of last 7
                                 days</p>
-                            <p class="f-light text-sm">From {{lastMonth}} till now</p>
+                            <p class="f-light text-sm">From {{last_week}} till now</p>
                         </div>
                     </div>
 
@@ -130,10 +130,10 @@
                     </div>
 
                     <div class="accordion-box my-8">
-                        <button class="accordion active">You have searched {{searchHistoryCount}} times since last
-                            30days</button>
+                        <button class="accordion active">Your ChatBot records {{searchHistoryCount}} searches in last
+                            7 days</button>
 
-                        <div class="panel" style="max-height: 255px;">
+                        <div class="panel">
                             <p class="f-light mb-2.5 text-gray-600 capitalize">Your searched items were</p>
                             <div class="flex items-center justify-start flex-wrap">
                                 {% for item in searchHistory %}
@@ -145,7 +145,7 @@
                     </div>
 
                     <div class="my-8">
-                        <p class="text-gray-600 f-light mb-2.5 capitalize">check which items you searched for and how many times in last 30days</p>
+                        <p class="text-gray-600 f-light mb-2.5 capitalize">check which items you searched for and how many times in last 7 days</p>
 
                         <div class="flex items-center bg-gray-200 rounded-md">
                             <div class="pl-2">
@@ -244,7 +244,7 @@
         ]);
     
         var options = {
-            title: 'Search Count In last 30 Days',
+            title: 'Search Count In last 7 Days',
             isStacked: true,
             hAxis: {
                 title: 'Date',
