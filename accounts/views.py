@@ -9,7 +9,6 @@ from accounts.models import User, OTP, UserProfile
 from accounts.utils import current_time
 
 from django.db.models import Count
-from django.db.models.functions import TruncDate
 
 import datetime
 
