@@ -14,7 +14,6 @@ from course.models import UserCourseHistory
 from accounts.models import User, OTP, UserProfile
 from core.models import UserRequestHistory
 from django.db.models import Count
-from django.db.models.functions import TruncDate
 
 from accounts.utils import current_time, check_recaptcha, check_str_special
 
