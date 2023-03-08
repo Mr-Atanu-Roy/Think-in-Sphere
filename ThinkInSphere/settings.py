@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     
     #own
     'core',
+    'course',
     'accounts',
     'API',
 ]
@@ -161,6 +162,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') 
+
 
 # REDIS SETTINGS 
 CACHE_TTL = 60*20     #cache time to live is 20min

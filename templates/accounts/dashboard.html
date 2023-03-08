@@ -114,9 +114,9 @@
                                 {{user_fname | title}}'s
                                 {% endif %}
                                 Statistics</p>
-                            <p class="f-light text-lg">Here you can see your performance and activity data of last 30
+                            <p class="f-light text-lg">Here you can see your performance and activity data of last 7
                                 days</p>
-                            <p class="f-light text-sm">From {{lastMonth | date}} till now</p>
+                            <p class="f-light text-sm">From {{last_week | date}} till now</p>
                         </div>
                     </div>
 
@@ -129,19 +129,63 @@
                         </div>
                     </div>
 
-                    <div class="accordion-box my-8">
-                        <button class="accordion">You have searched {{searchHistoryCount}} times since last
-                            30days <span class="f-light text-sm">(click to expand)</span></button>
+                    <div class="accordion-box mt-8">
+                        <button class="accordion">Your ChatBot records {{searchHistoryCount}} searches in last
+                            7 days <span class="f-light text-sm">(click to expand)</span></button>
 
                         <div class="panel">
-                            <p class="f-light mb-2.5 text-gray-600 capitalize">Your searched items were</p>
+                            <p class="f-light mb-2.5 text-gray-600 capitalize">Your unique searches were</p>
                             <div class="flex items-center justify-start flex-wrap">
                                 {% if searchHistoryCount == 0 %}
-                                <div class="text-sm p-1.5 mr-1.5 mb-2 text-red-600">You have not searched for anything from {{lastMonth | date}}
+                                <div class="text-sm p-1.5 mr-1.5 mb-2 text-red-600">You have not searched for anything
+                                    from {{last_week | date}}
                                 </div>
                                 {% else %}
                                 {% for item in searchHistory %}
-                                <div class="text-sm p-1.5 mr-1.5 mb-2 bg-red-100">{{item.request | truncatewords:5}}
+                                <div class="text-sm p-2 mr-1.5 mb-2 bg-red-100 flex items-center justify-center">
+                                    <div class="w-5 h-5 f-medium text-xs rounded-full flex items-center justify-center mr-1"
+                                        style="background-color: #97c680;">{{item.count}}</div>
+                                    <span>{{item.request | truncatewords:5}}</span>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-box mb-8">
+                        <button class="accordion">You looked up for {{course_searchHistoryCount}} courses and
+                            {{topic_searchHistoryCount}} topics in last
+                            7 days <span class="f-light text-sm">(click to expand)</span></button>
+
+                        <div class="panel">
+                            <p class="f-light mb-2 text-gray-600 capitalize">courses you looked up for</p>
+                            <div class="flex items-center justify-start flex-wrap">
+                                {% if course_searchHistoryCount == 0 %}
+                                <div class="text-sm p-1.5 mr-1.5 mb-2 text-red-600">You have not learned any course from
+                                    {{last_week | date}}
+                                </div>
+                                {% else %}
+                                {% for item in course_searchHistory %}
+                                <div class="text-sm p-2 mr-1.5 mb-2 bg-red-100 flex items-center justify-center">
+                                    <div class="w-5 h-5 f-medium text-xs rounded-full flex items-center justify-center mr-1"
+                                        style="background-color: #97c680;">{{item.count}}</div>
+                                    <span>{{item.request}}</span>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            <p class="f-light mb-2 text-gray-600 capitalize mt-3.5">topics you looked up for</p>
+                            <div class="flex items-center justify-start flex-wrap">
+                                {% if topic_searchHistoryCount == 0 %}
+                                <div class="text-sm p-1.5 mr-1.5 mb-2 text-red-600">You have not learned any topics from
+                                    {{last_week | date}}
+                                </div>
+                                {% else %}
+                                {% for item in topic_searchHistory %}
+                                <div class="text-sm p-2 mr-1.5 mb-2 bg-red-100 flex items-center justify-center">
+                                    <div class="w-5 h-5 f-medium text-xs rounded-full flex items-center justify-center mr-1"
+                                        style="background-color: #97c680;">{{item.count}}</div>
+                                    <span>{{item.request}}</span>
                                 </div>
                                 {% endfor %}
                                 {% endif %}
@@ -149,8 +193,9 @@
                         </div>
                     </div>
 
-                    <div class="my-8">
-                        <p class="text-gray-600 f-light mb-2.5 capitalize">check which items you searched for and how many times in last 30days</p>
+                    <div class="my-6">
+                        <p class="text-gray-600 f-light mb-2.5 capitalize">check which items you searched for and how
+                            many times in last 7 days</p>
 
                         <div class="flex items-center bg-gray-200 rounded-md">
                             <div class="pl-2">
@@ -164,9 +209,81 @@
                         </div>
                     </div>
 
+                    <div class="my-6">
+                        <p class="text-gray-600 f-light mb-2.5 capitalize pb-3">Compare this week performance with
+                            previous week
+                        </p>
+                        <div id="performance-box" class="flex items-center justify-between">
+
+                            <div class="flex items-center justify-between w-full">
+                                <div class="box flex-col items-center justify-center">
+                                    <div class="percentage mx-auto">
+                                        <div class="rounded-full flex items-center justify-center h-32 w-32" style="background: #97c680;">
+                                            <div class="number">
+                                                <p class="text-lg f-medium">{{chat_percent}}%</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="f-light text-sm mt-1.5 capitalize">
+                                        chat search has
+                                        {% if chat_percent > 0 %}
+                                        <span class="f-bold text-green-700">increased</span>
+                                        {% else %}
+                                        <span class="f-bold text-red-700">decreased</span>
+                                        {% endif %}
+
+                                        by {{chat_percent}}%
+                                    </p>
+                                </div>
+                                <div class="box flex-col items-center justify-center">
+                                    <div class="percentage mx-auto">
+                                        <div class="rounded-full flex items-center justify-center h-32 w-32" style="background: #97c680;">
+                                            <div class="number">
+                                                <p class="text-lg f-medium">{{course_percent}}%</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="f-light text-sm mt-1.5 capitalize">
+                                        course search has
+                                        {% if course_percent > 0 %}
+                                        <span class="f-bold text-green-700">increased</span>
+                                        {% else %}
+                                        <span class="f-bold text-red-700">decreased</span>
+                                        {% endif %}
+
+                                        by {{course_percent}}%
+                                    </p>
+                                </div>
+                                <div class="box flex-col items-center justify-center">
+                                    <div class="percentage mx-auto">
+                                        <div class="rounded-full flex items-center justify-center h-32 w-32" style="background: #97c680;">
+                                            <div class="number">
+                                                <p class="text-lg f-medium">{{topic_percent}}%</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="f-light text-sm mt-1.5 capitalize">
+                                        topic search has
+                                        {% if topic_percent > 0 %}
+                                        <span class="f-bold text-green-700">increased</span>
+                                        {% else %}
+                                        <span class="f-bold text-red-700">decreased</span>
+                                        {% endif %}
+
+                                        by {{topic_percent}}%
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
                     <div class="py-8">
-                        <p class="text-gray-600 f-light mb-2.5 capitalize">You search per day graph is shown below</p>
-                        <div id="chart_div"></div>
+                        <p class="text-gray-600 f-light mb-2.5 capitalize pb-3">Check your search-days graph below</p>
+                        <div class="grid grid-cols-6 gap-3">
+                            <div id="piechart" class="col-span-2 flex items-center justify-center"></div>
+                            <div id="chart_div" class="col-span-4"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -237,32 +354,60 @@
     });
 
     //google charts
-    google.charts.load('current', { packages: ['corechart', 'bar'] });
-    google.charts.setOnLoadCallback(drawStacked);
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawPieChart);
 
-    function drawStacked() {
+    function drawPieChart() {
+
         var data = google.visualization.arrayToDataTable([
-            ['Date', 'Searches'],
-            {% for item in chart_data %}
-            ['{{ item.0|date:"d-m-Y" }}', {{ item.1 }}],
-            {% endfor %}
-        ]);
-    
-        var options = {
-            title: 'Search Count In last 30 Days',
-            isStacked: true,
-            hAxis: {
-                title: 'Date',
-                format: 'd-m-Y',
-            },
-            vAxis: {
-                title: 'Searches'
-            }
-        };
+            ['Task', 'Searches in last 7days'],
+            ['ChatBot', {{ searchHistoryCount }}],
+    ['Course', {{ courseHistoryCount }}],
+        ['Topic', {{ topicHistoryCount }}],
+    ]);
 
-        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
+    var options = {
+        title: 'Your Activities since {{last_week | date}}'
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+    chart.draw(data, options);
     }
+
+
+    google.charts.load('current', { 'packages': ['bar'] });
+    google.charts.setOnLoadCallback(drawBarChart);
+    function drawBarChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Date', 'Bot Searches', 'Course Searches', 'Topic Searches'],
+            {% for item in chart_data %}
+                ['{{ item.0|date:"d-m-Y" }}', {{ item.1 }}, {{ item.2}}, {{ item.3}}],
+            {% endfor %}
+          
+        ]);
+
+    var options = {
+        bars: 'vertical',
+        vAxis: { format: 'decimal' },
+        height: 400,
+        colors: ['#1b9e77', '#d95f02', '#7570b3']
+    };
+
+    var chart = new google.charts.Bar(document.getElementById('chart_div'));
+
+    chart.draw(data, google.charts.Bar.convertOptions(options));
+
+    var btns = document.getElementById('btn-group');
+
+    btns.onclick = function (e) {
+
+        if (e.target.tagName === 'BUTTON') {
+            options.vAxis.format = e.target.id === 'none' ? '' : e.target.id;
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+        }
+    }
+      }
 
 </script>
 

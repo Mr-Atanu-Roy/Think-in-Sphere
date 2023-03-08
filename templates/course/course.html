@@ -1,0 +1,91 @@
+{% extends '../blocks/base.html' %}
+
+
+{% block title %} Courses | ThinkInSphere{% endblock title %}
+
+
+{% block body %}
+
+
+<section id="course" class="h-screen w-full pt-28 pb-20">
+    <div class="flex-col justify-center items-center max-w-3xl mx-auto">
+        <p class="f-light text-gray-600 mb-1.5">Search for courses like Physics, Mathematics, Philosophy......</p>
+        <form action="" method="post" class="flex items-center rounded-lg py-1.5" style="background-color: #1e1e2f;">
+            {% csrf_token %}
+            <div class="pl-3">
+                <i class="fa fa-search text-gray-300"></i>
+            </div>
+            <input class="shadow-sm border-none focus:border-none outline-none w-full rounded-md text-white f-medium leading-tight focus:outline-none p-3" id="course-search" name="course-search"
+                type="text" value="{{course_search}}" placeholder="Search for any course" style="background-color: #1e1e2f;">
+        </form>
+        <div class="py-3 text-sm overflow-y-auto" id="course-search-result" style="max-height: 300px;"></div>
+
+    </div>
+    <div class="flex flex-wrap justify-center items-center p-1 max-w-7xl mx-auto">
+        <div class="m-7 flex-col items-center justify-center text-center rounded-lg border-4 border-dashed p-7 w-72 h-72">
+            <div class="text-center flex items-center justify-center">
+                <img class="object-center w-40" src="/static/images/icons/studying.png" alt="proper study notes">
+            </div>
+            <p class="pointer-none text-gray-600 f-medium mt-6 text-center capitalize">proper study notes</p>
+        </div>
+        <div class="m-7 flex-col items-center justify-center text-center rounded-lg border-4 border-dashed p-7 w-72 h-72">
+            <div class="text-center flex items-center justify-center">
+                <img class="object-center w-40" src="/static/images/icons/notebook.png" alt="summery">
+            </div>
+            <p class="pointer-none text-gray-600 f-medium mt-6 text-center capitalize">Detailed Summery</p>
+        </div>
+        <div class="m-7 flex-col items-center justify-center text-center rounded-lg border-4 border-dashed p-7 w-72 h-72">
+            <div class="text-center flex items-center justify-center">
+                <img class="object-center w-40" src="/static/images/icons/interview.png" alt="important questions">
+            </div>
+            <p class="pointer-none text-gray-600 f-medium mt-6 text-center capitalize">most important questions</p>
+        </div>
+    </div>
+</section>
+
+
+{% include '../blocks/dismisable-alert.html' %}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    //search bar
+    $(document).ready(function () {
+        $("#course-search").on("keyup", function () {
+            if ($("#course-search").val().trim().length === 0) {
+                $("#course-search-result").html("");
+            } else {
+                $.ajax({
+                    url: ' {%url "course-search"%}',
+                    type: 'GET',
+                    data: {
+                        "query": $("#course-search").val().trim(),
+                    },
+                    success: function (response) {
+                        result = ``;
+                        if (response != "") {
+                            let response_data = response["data"];
+                            for (let index = 0; index < response_data.length; index++) {
+                                let course = response_data[index];
+                               
+                                result += `
+                                <a href="/course/view/${course.toLowerCase()}" class="flex justify-start cursor-pointer text-gray-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2">
+                                    <span class="h-2 w-2 m-2 rounded-full" style="background-color:#97c680;"></span>
+                                    <div class="flex-grow font-medium px-2">${course}</div>
+                                </a>
+                                `;
+                            }
+                        }
+                        $("#course-search-result").html(result);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+        });
+    });
+</script>
+
+{% endblock body %}

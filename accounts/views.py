@@ -3,12 +3,13 @@ from django.contrib.auth.models import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from accounts.models import User, OTP, UserProfile
 from core.models import UserRequestHistory
+from course.models import UserCourseHistory
+from accounts.models import User, OTP, UserProfile
 from accounts.utils import current_time
 
 from django.db.models import Count
-from django.db.models.functions import Trunc, TruncDate
+from django.db.models.functions import TruncDate
 
 import datetime
 
@@ -131,8 +132,9 @@ def login(request):
 @login_required(login_url="/auth/login")
 def dashboard(request):
     fname = lname = dob = country = city = course = institute = ""
-    searchHistory = searchHistoryCount = ""
-    last_month = current_time - datetime.timedelta(days=30)
+    searchHistory = course_searchHistory = topic_searchHistory = ""
+    searchHistoryCount = course_searchHistoryCount = topic_searchHistoryCount = topicHistoryCount = courseHistoryCount = 0
+    last_week = current_time - datetime.timedelta(days=7)
     context = {
         'fname': fname,
         'lname': lname,
@@ -154,20 +156,71 @@ def dashboard(request):
         course = getProfile.course_name
         institute = getProfile.institute_name
         
-        '''Get user's data for statistics'''
-        searchHistory = UserRequestHistory.objects.filter(created_at__gte = last_month, chatroom__user=request.user).order_by('-created_at')
-        searchHistoryCount = UserRequestHistory.objects.filter(created_at__gte = last_month).count()
+        '''Get user's data for statistics for last week'''
+        #getting chatbot search
+        search = UserRequestHistory.objects.filter(created_at__gte=last_week, chatroom__user=request.user)
+        searchHistory = search.values('request').annotate(count=Count('request'))
+        searchHistoryCount = search.count()
         
-        no_searches = UserRequestHistory.objects.filter(created_at__gte=last_month, chatroom__user=request.user).annotate(date=TruncDate('created_at')).values('date').annotate(total=Count('id'))
+        #getting course and topic search
+        course_topic_search = UserCourseHistory.objects.filter(created_at__gte=last_week, user=request.user)
+        #getting course search
+        course_searchHistory = course_topic_search.filter(type="subject").values('request').annotate(count=Count('request'))
+        course_searchHistoryCount = course_searchHistory.count()
+        
+        #getting topic search
+        topic_searchHistory = course_topic_search.filter(type="topic").values('request').annotate(count=Count('request'))
+        topic_searchHistoryCount = topic_searchHistory.count()
+        
+        '''For pie graph'''
+        courseHistoryCount = course_topic_search.filter(type="subject").count()
+        topicHistoryCount = course_topic_search.filter(type="topic").count()
+        
+        '''Get users data for compairing'''
+        previous_week = last_week - datetime.timedelta(days=7)
+        #getting chat searches
+        this_week_chat = searchHistoryCount
+        previous_week_chat = UserRequestHistory.objects.filter(created_at__range=(previous_week, last_week), chatroom__user=request.user).count()
+        
+        #getting course and topic search
+        previous_week_course_topic = UserCourseHistory.objects.filter(created_at__range=(previous_week, last_week), user=request.user)
+        #getting course search
+        this_week_course = course_topic_search.filter(type="subject").count()
+        previous_week_course = previous_week_course_topic.filter(type="subject").count()
+        
+        #getting topic search
+        this_week_topic = course_topic_search.filter(type="topic").count()
+        previous_week_topic = previous_week_course_topic.filter(type="topic").count()
+        
+        if this_week_chat > 0:
+            chat_percent = -int(((previous_week_chat-this_week_chat)/this_week_chat)*100)
+        else:
+            chat_percent = 0
+        if this_week_course > 0:
+            course_percent = -int(((previous_week_course-this_week_course)/this_week_course)*100)
+        else:
+            course_percent = 0
+        if this_week_topic > 0:
+            topic_percent = -int(((previous_week_topic-this_week_topic)/this_week_topic)*100)
+        else:
+            topic_percent = 0
+               
+        context["chat_percent"] = chat_percent
+        context["course_percent"] = course_percent
+        context["topic_percent"] = topic_percent
+
         chart_data = []
-        
-        if len(no_searches) > 0:
-            for item in no_searches:
-                date = item['date']
-                count = item['total']
-                
-                data = [date, count]
-                chart_data.append(data)
+        check_date = last_week
+        while (check_date <= current_time):
+            data = [check_date, 0, 0, 0]
+            chat = UserRequestHistory.objects.filter(created_at__date=check_date, chatroom__user=request.user).count()
+            course = UserCourseHistory.objects.filter(created_at__date=check_date, type="subject", user=request.user).count()
+            topic = UserCourseHistory.objects.filter(created_at__date=check_date, type="topic", user=request.user).count()
+            
+            data[1], data[2], data[3] = chat, course, topic
+            chart_data.append(data)
+            
+            check_date += datetime.timedelta(days=1)
     
         context["chart_data"] = chart_data
         
@@ -210,9 +263,17 @@ def dashboard(request):
     context["course"] = course
     context["institute"] = institute
     
-    context["lastMonth"] = last_month
+    context["last_week"] = last_week
     context["searchHistory"] = searchHistory
     context["searchHistoryCount"] = searchHistoryCount
+    context["course_searchHistory"] = course_searchHistory
+    context["course_searchHistoryCount"] = course_searchHistoryCount
+    context["topic_searchHistory"] = topic_searchHistory
+    context["topic_searchHistoryCount"] = topic_searchHistoryCount
+    
+    context["courseHistoryCount"] = courseHistoryCount
+    context["topicHistoryCount"] = topicHistoryCount
+    
         
     return render(request, './accounts/dashboard.html', context)
 

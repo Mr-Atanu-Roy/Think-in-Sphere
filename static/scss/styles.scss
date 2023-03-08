@@ -28,6 +28,27 @@ $primary-bg: #ddf7d1;
   color: $primary-col;
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Set the background color of the scrollbar */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+/* Set the color and rounded corners of the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 5px;
+}
+
+/* Set the color and hover effects of the scrollbar thumb when hovered */
+::-webkit-scrollbar-thumb:hover {
+  background-color: $secondary-col;
+}
+
 header {
   width: 100%;
   background: white;
@@ -130,8 +151,8 @@ form {
 }
 
 #chat {
-  #query-img{
-    div{
+  #query-img {
+    div {
       height: 275px;
       width: 275px;
     }
@@ -220,7 +241,6 @@ form {
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.2s ease-out;
-      
     }
     .accordion:after {
       content: "\02795"; /* Unicode character for "plus" sign (+) */
@@ -234,4 +254,28 @@ form {
       content: "\2796"; /* Unicode character for "minus" sign (-) */
     }
   }
+}
+
+#course-topic {
+  .topic-headings {
+    box-shadow: inset 0 -9px 0 0 $primary-bg;
+  }
+}
+
+@keyframes fill {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(126deg);
+  }
+}
+#performance-box {
+ .box{
+  .percentage{
+    position: relative;
+    width: 150px;
+    height: 150px;
+  }
+ }  
 }

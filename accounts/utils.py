@@ -13,6 +13,11 @@ tz = pytz.timezone(settings.TIME_ZONE)
 current_time = datetime.datetime.now(tz)
 
 
+import re
+special_char_regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+
+
+
 class SendEmail(Thread):
     '''
     Using threads to send mails
@@ -41,4 +46,11 @@ class BaseModel(models.Model):
     
     class Meta:
         abstract = True
-        
+
+
+
+def check_str_special(string):
+    if special_char_regex.search(string):
+        return True
+    else:
+        return False
