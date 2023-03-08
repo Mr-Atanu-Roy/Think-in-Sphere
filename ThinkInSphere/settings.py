@@ -73,6 +73,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                
+                #own
                 'ThinkInSphere.context_processors.my_context',
             ],
         },
@@ -173,7 +175,7 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient"
         },
-        "KEY_PREFIX": "neuralnet"
+        "KEY_PREFIX": "thinkinsphere"
     }
 }
 
