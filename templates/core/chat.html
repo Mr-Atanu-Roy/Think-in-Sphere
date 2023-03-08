@@ -70,23 +70,51 @@
             </div>
         </div>
 
-        <div class="col-span-2 pt-12 pb-16 px-5 h-screen fixed top-14 right-0 z-20 flex-col justify-between items-center" id="rooms-container">
-            <div class="">
-                <a href="{% url 'create-room' %}" class="square_btn-1 w-full rounded text-center">New Room <i class="fa fa-plus ml-2"></i></a>
-            </div>
-            <div>
-                {% for chatroom in chatRooms %}
-                <div class="my-4 text-white text-sm ">
-                    <a href="/chat/room/{{chatroom.room_id}}" class="flex justify-start items-start">
-                        <i class="fa fa-commenting relative top-1"></i>
-                        <p class="ml-2.5 font-medium">{{chatroom.room_name | truncatechars:40}}</p>
-                    </a>
+        <div class="col-span-2 border h-screen fixed top-14 right-0">
+            <div class="hidden h-full pt-12 pb-16 px-5 z-20 flex-col justify-between items-center"
+                id="rooms-container">
+                <div class="">
+                    <a href="{% url 'create-room' %}" class="square_btn-1 w-full rounded text-center">New Room <i
+                            class="fa fa-plus ml-2"></i></a>
                 </div>
+                <div>
+                    {% for chatroom in chatRooms %}
+                    <div class="my-4 text-white text-sm ">
+                        <a href="/chat/room/{{chatroom.room_id}}" class="flex justify-start items-start">
+                            <i class="fa fa-commenting relative top-1"></i>
+                            <p class="ml-2.5 font-medium">{{chatroom.room_name | truncatechars:40}}</p>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div id="query-img" class="flex-col justify-evenly items-center py-16 px-6 h-full relative">
+                {% if imgResult != "" %}
+                  
+                {% for img in imgResult %}
+                    <div class="shadow-sm w-32 my-8">
+                        <a href="{{img}}" target="_blank" class="w-full h-full"><img src="{{img}}" alt="{{query}}" class="rounded-lg w-full"></a>
+                    </div>
                 {% endfor %}
+                
+                {% else %}
+                <div class="flex-col items-center justify-center w-full text-center">
+                    <div class="h-full w-full text-center flex items-center justify-center rounded-lg border-4 border-dashed">
+                        <div class="flex flex-auto max-h-48 w-2/5 mx-auto -mt-10">
+                            <img class="has-mask w-full object-center" src="https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg" alt="freepik image">
+                        </div>
+                    </div>
+                    <p class="pointer-none text-gray-500 f-light">Image explaination of your search result will show up here</p>
+                </div>
+                {% endif %}
+
             </div>
         </div>
 
-
+        <div id="room-container-btn" class="fixed top-24 left-7 cursor-pointer rounded-sm text-2xl z-50"
+            style="color: #1e1e2f;">
+            <i class="fa fa-bars"></i>
+        </div>
 
         <!-- scroll to bottom btn  -->
         {% if chats != "" %}
@@ -111,6 +139,23 @@
             behavior: 'smooth'
         });
     }
+
+    const roomContainer = document.getElementById('rooms-container');
+    const closeroomContainerBtn = document.getElementById('room-container-btn');
+
+    closeroomContainerBtn.addEventListener('click', () => {
+        roomContainer.classList.toggle('hidden');
+
+        if (closeroomContainerBtn.querySelector("i").classList.contains("fa-bars")) {
+            closeroomContainerBtn.querySelector("i").classList.remove("fa-bars");
+            closeroomContainerBtn.querySelector("i").classList.add("fa-times");
+        } else {
+            closeroomContainerBtn.querySelector("i").classList.remove("fa-times");
+            closeroomContainerBtn.querySelector("i").classList.add("fa-bars");
+        }
+    });
+
+
 </script>
 
 {% endblock body %}

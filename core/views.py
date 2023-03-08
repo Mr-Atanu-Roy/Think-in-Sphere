@@ -6,7 +6,7 @@ from django.contrib import messages
 from accounts.models import User
 from core.models import ChatRoom, UserRequestHistory
 
-from core.utils import Speak, random_name
+from core.utils import Speak, random_name, openai_completion_endpoint, openai_image_endpoint
 
 import openai
 import speech_recognition as sr
@@ -75,10 +75,11 @@ def createRoom(request):
 
 @login_required(login_url="/auth/login")
 def chat(request, room_id):
-    query = result = ""
+    query = result = imgResult = ""
     context = {
         "query" : query,
         "result" : result,
+        "imgResult" : imgResult,
     }
     
     chatRooms = ChatRoom.objects.filter(user=request.user).order_by('-created_at')
@@ -104,24 +105,19 @@ def chat(request, room_id):
             else:
                 if getRoom:
                     if cache.get(query):
-                        result = cache.get(query)                
+                        result = cache.get(query).get("text")    
+                        imgResult = cache.get(query).get("img")
+                                  
                     else:
-                        prompt = f"The following is a conversation of a student with an AI assistant. The assistant is helpful, creative, clever, and very friendly and answers all the questions of the student very clearly.\n\nHuman: {query}\n\nAI:"
-                                    
-                        response = openai.Completion.create(
-                        model="text-davinci-003",
-                        prompt=prompt,
-                        max_tokens=2048,
-                        temperature=0.9,
-                        top_p=1,
-                        frequency_penalty=0.0,
-                        presence_penalty=0.6,
-                        stop=[" Human:", " AI:"]
-                        )
+                        result = openai_completion_endpoint(query)
+                        imgResult = openai_image_endpoint(result[0:100])
                         
-                        result =  response["choices"][0]["text"]
-                        result = result.lstrip()
-                        cache.set(query, result) 
+                        cache_dict = {
+                            "text" : result,
+                            "img" : imgResult
+                        } 
+                        
+                        cache.set(query, cache_dict)   
                         
                     newChat = UserRequestHistory(request=query, response=result)  
                     newChat.save() 
@@ -147,24 +143,19 @@ def chat(request, room_id):
                 else:
                     if getRoom:
                         if cache.get(query):
-                            result = cache.get(query)
+                            result = cache.get(query).get("text")    
+                            imgResult = cache.get(query).get("img")
+                                  
                         else:
-                            prompt = f"The following is a conversation of a student with an AI assistant. The assistant is helpful, creative, clever, and very friendly and answers all the questions of the student very clearly.\n\nHuman: {query}\n\nAI:"
-                                
-                            response = openai.Completion.create(
-                            model="text-davinci-003",
-                            prompt=prompt,
-                            max_tokens=2048,
-                            temperature=0.9,
-                            top_p=1,
-                            frequency_penalty=0.0,
-                            presence_penalty=0.6,
-                            stop=[" Human:", " AI:"]
-                            )
-
-                            result =  response["choices"][0]["text"]
-                            result = result.lstrip()
-                            cache.set(query, result)
+                            result = openai_completion_endpoint(query)
+                            imgResult = openai_image_endpoint(result[0:100])
+                            
+                            cache_dict = {
+                                "text" : result,
+                                "img" : imgResult
+                            } 
+                            
+                            cache.set(query, cache_dict)   
                     else:
                         print("No room selected")
                         messages.error(request, "No room selected")
@@ -184,6 +175,7 @@ def chat(request, room_id):
     
     context["query"] = query
     context["result"] = result
+    context["imgResult"] = imgResult
     
     Speak(result).start()
     
@@ -200,6 +192,4 @@ def course(request):
 def courseSearch(request, course):
     
     return render(request, './core/view-course.html')
-
-
 
