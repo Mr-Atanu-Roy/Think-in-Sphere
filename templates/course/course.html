@@ -60,18 +60,17 @@
                     type: 'GET',
                     data: {
                         "query": $("#course-search").val().trim(),
+                        "lang": "{{user_lang}}",
                     },
                     success: function (response) {
                         result = ``;
                         if (response != "") {
-                            let response_data = response["data"];
-                            for (let index = 0; index < response_data.length; index++) {
-                                let course = response_data[index];
-                               
+                            dict = response['data']
+                            for (let key in dict) {
                                 result += `
-                                <a href="/course/view/${course.toLowerCase()}" class="flex justify-start cursor-pointer text-gray-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2">
+                                <a href="/course/view/${key}" class="flex justify-start cursor-pointer text-gray-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2">
                                     <span class="h-2 w-2 m-2 rounded-full" style="background-color:#97c680;"></span>
-                                    <div class="flex-grow font-medium px-2">${course}</div>
+                                    <div class="flex-grow font-medium px-2">${dict[key]}</div>
                                 </a>
                                 `;
                             }

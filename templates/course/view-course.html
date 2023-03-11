@@ -34,13 +34,13 @@
         </div>
         {% else %}
 
-        {% for topic in result %}
-        <a href="/course/view/topic/{{topic|lower}} in {{course}}"
+        {% for key, value in result.items %}
+        <a href="/course/view/topic/{{key|lower}} in {{course}}"
             class="m-7 flex-col items-center justify-center text-center rounded-lg border-4 border-dashed p-7 w-72 h-72">
             <div class="text-center flex items-center justify-center">
-                <img class="object-center w-40" src="/static/images/icons/read.png" alt="{{topic|lower}}">
+                <img class="object-center w-40" src="/static/images/icons/read.png" alt="{{value|lower}}">
             </div>
-            <p class="pointer-none text-gray-600 f-medium mt-6 text-center capitalize">{{topic|title}}</p>
+            <p class="pointer-none text-gray-600 f-medium mt-6 text-center capitalize">{{value|title}}</p>
         </a>
         {% endfor %}
 

@@ -5,11 +5,11 @@ from accounts.utils import current_time
 from core.models import UserRequestHistory
 from course.models import UserCourseHistory
 import datetime
-from django.db.models import Count
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.template.defaultfilters import truncatewords
 
 from .utils import courses_list
+from core.utils import translate_text, detect_language
 # Create your views here.
 
 class DashboardDashboardSearchQueryView(View):
@@ -46,12 +46,18 @@ class CourseSerchQueryView(View):
     def get(self, request):
         try:
             query = request.GET.get('query')
+            lang = request.GET.get('lang')
             if query:
                 if query.isspace() == False:
-                    similar_course = []
+                    detect_lang, _, err = detect_language(query)
+                    if err == None and detect_lang != 'en':
+                        query, _ = translate_text(query, detect_lang, 'en')
+                    similar_course = {}
                     for course in courses_list:
                         if query.lower() in course.lower():
-                            similar_course.append(course.title())
+                            translated_text, err1 = translate_text(course, 'en', lang)
+                            if err1 == None:
+                                similar_course[course] = translated_text
                     
                     return JsonResponse({"data": similar_course})
                 
