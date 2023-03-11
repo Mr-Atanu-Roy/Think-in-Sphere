@@ -243,6 +243,7 @@ def dashboard(request):
                 user.last_name = lname
                 user.save()
                 
+                getProfile.date_of_birth = dob
                 getProfile.city = city
                 getProfile.country = country
                 getProfile.course_name = course
