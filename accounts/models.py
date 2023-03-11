@@ -11,11 +11,16 @@ import random
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
-# Create your models here.
-
+#choices
 otp_purpose_choices = (
     ("email_verification", "Email Verification"),
     ("reset_password", "Reset Password")
+)
+
+language_choices = (
+    ("en", "English"),
+    ("hi", "Hindi"),
+    ("ben", "Bengali"),
 )
 
 
@@ -46,6 +51,7 @@ class UserProfile(BaseModel):
     '''
     
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="User")
+    language = models.CharField(choices=language_choices, default="en", max_length=255)
     country = models.CharField(max_length=255, blank=True, null=True, default="", verbose_name="Country")
     city = models.CharField(max_length=255, blank=True, null=True, verbose_name="City")
     date_of_birth = models.DateField(null=True, blank=True, verbose_name="Date Of Birth")

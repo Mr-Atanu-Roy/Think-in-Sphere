@@ -48,7 +48,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     fieldsets = [
         ("User Details", {
             "fields": (
-                ['user', 'country', 'city', 'date_of_birth']
+                ['user', 'language', 'country', 'city', 'date_of_birth']
             ),
         }),
         ("More Details", {

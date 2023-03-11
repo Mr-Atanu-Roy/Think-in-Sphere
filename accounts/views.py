@@ -158,7 +158,6 @@ def dashboard(request):
         'city': city,
         'course': course,
         'institute': institute,
-
     }
     if not request.user.is_verified:
         messages.warning(request, "Your email is not verified it. Please verify it")
@@ -170,6 +169,7 @@ def dashboard(request):
         country = getProfile.country
         course = getProfile.course_name
         institute = getProfile.institute_name
+        language = getProfile.language
         
         '''Get user's data for statistics for last week'''
         #getting chatbot search
@@ -252,8 +252,9 @@ def dashboard(request):
             city = request.POST.get("city")
             course = request.POST.get("course")
             institute = request.POST.get("institute")
+            language = request.POST.get("language")
             
-            if fname != "" and lname != "" and dob != "" and country != "" and city != "":
+            if fname != "" and lname != "" and dob != "" and country != "" and city != "" and language != "":
                 if check_str_special(fname) or check_str_special(lname) or check_str_special(country) or check_str_special(city) or check_str_special(course) or check_str_special(institute):
                     messages.error(request, "Special charecters are not allowed")
                 else:
@@ -268,6 +269,7 @@ def dashboard(request):
                         getProfile.country = country
                         getProfile.course_name = course
                         getProfile.institute_name = institute
+                        getProfile.language = language
                         getProfile.save()
                         
                         messages.success(request, "Profile updated successfully")
@@ -284,6 +286,7 @@ def dashboard(request):
     context["country"] = country
     context["course"] = course
     context["institute"] = institute
+    context["language"] = language
     
     context["last_week"] = last_week
     context["searchHistory"] = searchHistory
