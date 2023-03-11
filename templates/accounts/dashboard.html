@@ -143,9 +143,8 @@
                                 {% else %}
                                 {% for item in searchHistory %}
                                 <div class="text-sm p-2 mr-1.5 mb-2 bg-red-100 flex items-center justify-center">
-                                    <div class="w-5 h-5 f-medium text-xs rounded-full flex items-center justify-center mr-1"
-                                        style="background-color: #97c680;">{{item.count}}</div>
-                                    <span>{{item.request | truncatewords:5}}</span>
+                                    <div class="w-5 h-5 f-medium text-xs rounded-full flex items-center justify-center mr-1" style="background-color: #97c680;">{{item.count}}</div>
+                                    <span>{{item.request | truncatewords:7}}</span>
                                 </div>
                                 {% endfor %}
                                 {% endif %}
