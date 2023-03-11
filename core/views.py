@@ -98,7 +98,7 @@ def chat(request, room_id):
         if request.method == "POST" and "text-input" in request.POST:
             query = request.POST.get("query")
             query = query.lower()
-            if query.isspace():
+            if query == "":
                 message = "Please input some text"
                 messages.error(request, message)
                 result = message
@@ -111,7 +111,11 @@ def chat(request, room_id):
                                   
                     else:
                         result = openai_completion_endpoint(query)
-                        imgResult = openai_image_endpoint(result[0:100])
+                        
+                        if "hello" in query.lower() or "hi" in query or  "hi there" in result.lower() or "i help you" in result.lower():
+                            imgResult = ""
+                        else:
+                            imgResult = openai_image_endpoint(result[0:100])
                         
                         cache_dict = {
                             "text" : result,
@@ -138,7 +142,7 @@ def chat(request, room_id):
             try:
                 query = r.recognize_google(audio)
                 query = query.lower()
-                if query.isspace():
+                if query == "":
                     message = "Please say something"
                     messages.error(request, message)
                     result = message
