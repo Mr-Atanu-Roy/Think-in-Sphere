@@ -228,11 +228,11 @@ def dashboard(request):
         check_date = last_week
         while (check_date <= current_time):
             data = [check_date, 0, 0, 0]
-            chat = UserRequestHistory.objects.filter(created_at__date=check_date, chatroom__user=request.user).count()
-            course = UserCourseHistory.objects.filter(created_at__date=check_date, type="subject", user=request.user).count()
-            topic = UserCourseHistory.objects.filter(created_at__date=check_date, type="topic", user=request.user).count()
+            chat_data = UserRequestHistory.objects.filter(created_at__date=check_date, chatroom__user=request.user).count()
+            course_data = UserCourseHistory.objects.filter(created_at__date=check_date, type="subject", user=request.user).count()
+            topic_data = UserCourseHistory.objects.filter(created_at__date=check_date, type="topic", user=request.user).count()
             
-            data[1], data[2], data[3] = chat, course, topic
+            data[1], data[2], data[3] = chat_data, course_data, topic_data
             chart_data.append(data)
             
             check_date += datetime.timedelta(days=1)
