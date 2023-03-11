@@ -213,8 +213,7 @@ def email_verification(request):
                    
         if request.method == "POST" and "send-otp" in request.POST:
             email = request.POST.get("email")
-            email = email.lstrip()
-            email = email.rstrip()
+            email = email.strip()
                             
             if email != "":
                 
@@ -237,8 +236,7 @@ def email_verification(request):
 
         if request.method == "POST" and "verify-email" in request.POST:
             otp = request.POST.get("otp")
-            otp = otp.lstrip()
-            otp = otp.rstrip()
+            otp = otp.strip()
             
             if otp != "":
                 try:
@@ -285,7 +283,7 @@ def email_verification(request):
     context['email'] = email
     context['otp'] = otp
     
-    return render(request, './accounts/email-verification.html')
+    return render(request, './accounts/email-verification.html', context)
 
 
 def reset_password(request):
