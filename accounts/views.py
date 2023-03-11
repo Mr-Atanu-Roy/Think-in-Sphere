@@ -52,11 +52,11 @@ def signin(request):
                 context['password'] = password
                 context['cpassword'] = cpassword
 
-                if not email.isspace():
+                if email != "":
                     if User.objects.filter(email = email).first() :
                         messages.error(request, "An account already exists with this email")
                     else:
-                        if (not fname.isspace()) and (not lname.isspace()) and (not password.isspace()) and (not cpassword.isspace()):
+                        if fname != "" and lname != "" and password != "" and cpassword != "":
                             if check_str_special(fname) or check_str_special(lname):
                                 messages.error(request, "Special charecters are not allowed")
                             else:
@@ -107,7 +107,7 @@ def login(request):
                 context["email"] = email
                 context["password"] = password
                 
-                if (not email.isspace()) and (not password.isspace()):
+                if email != "" and password != "":
                     if request.recaptcha_is_valid:
                         try:
                             checkUser = User.objects.get(email=email)
@@ -253,23 +253,26 @@ def dashboard(request):
             course = request.POST.get("course")
             institute = request.POST.get("institute")
             
-            if check_str_special(fname) or check_str_special(lname) or check_str_special(country) or check_str_special(city) or check_str_special(course) or check_str_special(institute):
-                messages.error(request, "Special charecters are not allowed")
+            if fname != "" and lname != "" and dob != "" and country != "" and city != "":
+                if check_str_special(fname) or check_str_special(lname) or check_str_special(country) or check_str_special(city) or check_str_special(course) or check_str_special(institute):
+                    messages.error(request, "Special charecters are not allowed")
+                else:
+                    if getProfile is not None:
+                        user = request.user
+                        user.first_name = fname
+                        user.last_name = lname
+                        user.save()
+                        
+                        getProfile.date_of_birth = dob
+                        getProfile.city = city
+                        getProfile.country = country
+                        getProfile.course_name = course
+                        getProfile.institute_name = institute
+                        getProfile.save()
+                        
+                        messages.success(request, "Profile updated successfully")
             else:
-                if getProfile is not None:
-                    user = request.user
-                    user.first_name = fname
-                    user.last_name = lname
-                    user.save()
-                    
-                    getProfile.date_of_birth = dob
-                    getProfile.city = city
-                    getProfile.country = country
-                    getProfile.course_name = course
-                    getProfile.institute_name = institute
-                    getProfile.save()
-                    
-                    messages.success(request, "Profile updated successfully")
+                messages.error(request, "name, dob, country, city must not be blank")
                             
     except Exception as e:
         print(e)
@@ -320,7 +323,7 @@ def email_verification(request):
             email = request.POST.get("email")
             email = email.strip()
                             
-            if not email.isspace():
+            if email != "":
                 
                 try:
                     getUser = User.objects.get(email=email)
@@ -343,7 +346,7 @@ def email_verification(request):
             otp = request.POST.get("otp")
             otp = otp.strip()
             
-            if not otp.isspace():
+            if otp != "":
                 if otp.isnumeric():
                     try:
                         if request.user.is_authenticated:
@@ -413,7 +416,7 @@ def reset_password(request):
             
         if request.method == "POST" and "send-otp" in request.POST:
             email = request.POST.get("email")
-            if not email.isspace():
+            if email != "":
                 try:
                     getUser = User.objects.get(email=email)
                     newOTP = OTP(user=getUser, purpose="reset_password")
@@ -436,7 +439,7 @@ def reset_password(request):
             password = request.POST.get("password")
             cpassword = request.POST.get("cpassword")
             
-            if (not otp.isspace()) and (not password.isspace()) and (not cpassword.isspace()):
+            if otp != "" and password != "" and cpassword != "":
                 if otp.isnumeric():
                     if password == cpassword:                    
                         try:
