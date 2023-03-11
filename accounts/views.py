@@ -392,7 +392,7 @@ def email_verification(request):
     context['email'] = email
     context['otp'] = otp
     
-    return render(request, './accounts/email-verification.html')
+    return render(request, './accounts/email-verification.html', context)
 
 
 
