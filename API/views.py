@@ -31,7 +31,6 @@ class DashboardDashboardSearchQueryView(View):
                     data2 = [{'id': obj.id, 'request': truncatewords(obj.request, 13), 'created_at' : naturalday(obj.created_at)} for obj in result2]
                     
                     data =  sorted(data1 + data2, key=lambda x: x['created_at'], reverse=True)
-                    print(data)
                     
                     return JsonResponse(data, safe=False)
                 
