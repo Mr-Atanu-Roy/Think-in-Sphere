@@ -6,3 +6,5 @@ db.sqlite3
 *tailwind.config.js
 *.css.map
 *tempCodeRunnerFile.py
+/media
+*.mp3

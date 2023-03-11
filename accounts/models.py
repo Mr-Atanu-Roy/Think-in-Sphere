@@ -20,7 +20,7 @@ otp_purpose_choices = (
 language_choices = (
     ("en", "English"),
     ("hi", "Hindi"),
-    ("ben", "Bengali"),
+    ("bn", "Bengali"),
 )
 
 
