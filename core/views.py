@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from accounts.models import User
 from core.models import ChatRoom, UserRequestHistory
 
 from core.utils import Speak, random_name, openai_completion_endpoint, openai_image_endpoint
