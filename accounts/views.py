@@ -168,6 +168,7 @@ def dashboard(request):
                 user.last_name = lname
                 user.save()
                 
+                getProfile.date_of_birth = dob
                 getProfile.city = city
                 getProfile.country = country
                 getProfile.course_name = course
@@ -181,7 +182,6 @@ def dashboard(request):
     except Exception as e:
         print(e)
     
-    print(dob)
     context["fname"] = request.user.first_name
     context["lname"] = request.user.last_name
     context["dob"] = dob
