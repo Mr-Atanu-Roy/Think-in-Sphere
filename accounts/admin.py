@@ -56,11 +56,6 @@ class UserProfileAdmin(admin.ModelAdmin):
                 ['course_name', 'institute_name']
             ),
         }),
-        ("User's Prompt For Chatbot ", {
-            "fields": (
-                ['bot_prompt']
-            ), 'classes': ['collapse']
-        }),
     ]
 
     
