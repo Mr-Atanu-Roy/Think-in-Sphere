@@ -57,7 +57,6 @@ class UserProfile(BaseModel):
     date_of_birth = models.DateField(null=True, blank=True, verbose_name="Date Of Birth")
     course_name = models.CharField(max_length=255, blank=True, null=True, default="", verbose_name="Current Persuing Course")
     institute_name = models.CharField(max_length=255, blank=True, null=True, default="", verbose_name="Current Institute")
-    bot_prompt = models.TextField(verbose_name="User's Chatbot Prompt", default="The following is a conversation of a student with an AI assistant. The assistant is helpful, creative, clever, and very friendly and answers all the questions of the student very clearly.")
     
     class Meta:
         verbose_name_plural = "User Profile"
