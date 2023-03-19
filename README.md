@@ -106,28 +106,35 @@ To run the project in your localserver
 
 ### Entity Relationship Model -
 - ER Model -
+
 ![ER Diagram](https://user-images.githubusercontent.com/100309120/226158517-8e17b002-d054-42c6-99e6-6a660bc56479.png)
 
 ### Data Flow Diagram -
 - DFD -
+
 ![DFD](https://user-images.githubusercontent.com/100309120/226158538-b2a40cde-689c-48e7-97b1-4047a06c486c.png)
 
 ### High Level Components -
 - Authentication System -
 
 **Signin/Registration:** Responsible for registering a user in our application
+
 ![SignIn DFD (1)](https://user-images.githubusercontent.com/100309120/226158544-29f790b7-f329-49d1-a0c4-a964f98c3e00.png)
 
 **Login:** Responsible for loging in a user
+
 ![Login DFD (1)](https://user-images.githubusercontent.com/100309120/226158550-f9ab6e1d-7e16-4b16-863f-f17fb831f623.png)
 
 - Chatbot -
+
 ![ChatBot DFD](https://user-images.githubusercontent.com/100309120/226158555-f928c17a-9f33-445c-a4df-ba6c427ce5f6.png)
 
 - Courses -
+
 ![Course DFD](https://user-images.githubusercontent.com/100309120/226158564-f8ec497e-2f37-49cd-b1de-ff4b54bfae5d.png)
 
-- Dashboard- 
+- Dashboard-
+
 ![Dashboard DFD](https://user-images.githubusercontent.com/100309120/226158600-251be959-4390-4321-98ee-7c105dec6852.jpg)
 
 ## Authors
