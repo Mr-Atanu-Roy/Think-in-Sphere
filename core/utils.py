@@ -81,7 +81,7 @@ def openai_image_endpoint(query):
 def openai_general_endpoint(prompt, token=2045, temperature=0.7):
     response = openai.Completion.create(
         model="text-davinci-003",
-        prompt=f"Generate subtopics for course {prompt}",
+        prompt=prompt,
         temperature=temperature,
         max_tokens=token,
         top_p=1,

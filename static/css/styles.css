@@ -9,7 +9,7 @@
   font-weight: 500;
 }
 
-.f-bold, .btn-1, .square_btn, .square_btn-1 {
+.f-bold, .btn-1, .topic-btn-1, .square_btn, .square_btn-1 {
   font-family: "Roboto Slab", serif;
   font-weight: 700;
 }
@@ -74,7 +74,7 @@ header .nav-links:hover {
           box-shadow: inset 0 -9px 0 0 #97c680;
 }
 
-.btn-1 {
+.btn-1, .topic-btn-1 {
   color: white;
   min-width: 160px;
   padding: 10px 30px;
@@ -87,7 +87,7 @@ header .nav-links:hover {
   transition: all 0.3s ease-in-out;
 }
 
-.btn-1:hover {
+.btn-1:hover, .topic-btn-1:hover {
   -webkit-box-shadow: inset 0 45px 0 -50px #1e1e2f;
           box-shadow: inset 0 45px 0 -50px #1e1e2f;
   color: #1e1e2f;
@@ -138,6 +138,11 @@ header .nav-links:hover {
   color: white;
   border-color: #97c680;
   background: none;
+}
+
+.topic-btn-1 {
+  border-radius: 4px;
+  font-size: 0.8rem;
 }
 
 form input {

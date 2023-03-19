@@ -1,0 +1,111 @@
+{% extends '../blocks/base.html' %}
+
+{% block title %}Give Exam | {{exam_name | title}}{% endblock title %}
+
+
+{% block body %}
+
+<section id="give-exam">
+
+    <div class="min-h-screen bg-gray-100 flex flex-col justify-center">
+        <div class="py-6 px-3 md:py-12 md:mx-12 pt-16 h-full">
+            <div class="rounded-xl p-5 md:p-10 shadow-lg bg-white">
+                <div id="header-box" class="grid grid-cols-3 gap-6 f-medium">
+                    <div class="col-span-2">
+                        <div>
+                            <strong class="capitalize">Exam Name - {{exam_name}}</strong>
+                        </div>
+                        <div>
+                            <strong class="capitalize">Exam Topic - {{exam_topic}}</strong>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div>
+                            <strong class="capitalize">Exam Marks - {{exam_marks}}</strong>
+                        </div>
+                        <div>
+                            <strong class="capitalize">Time Left - <span id="timer">{{exam_time}}
+                                    Minutes</span></strong>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-5">
+                <div id="question-box">
+                    <form action="" method="post" id="exam-form">
+                        {% csrf_token %}
+                        <div>
+                            {% for questiom_id, question in questions.items %}
+                            <div class="py-2.5">
+                                <div class="question-box">
+                                    <p class="f-medium py-2">{{ forloop.counter }}.  {{question.question}}</p>
+                                </div>
+                                <div class="options-box f-light grid grid-cols-2 gap4 capitalize">
+                                    <div class="w-full py-1.5">
+                                        <div class="option my-1">
+                                            <input type="radio" name="{{questiom_id}}" value="{{question.opt1}}"
+                                                id="{{question.opt1}} {{question.question|truncatewords:3}}">
+                                            <label for="{{question.opt1}} {{question.question|truncatewords:3}}" class="cursor-pointer">{{question.opt1}}</label>
+                                        </div>
+                                        <div class="option my-1">
+                                            <input type="radio" name="{{questiom_id}}" value="{{question.opt2}}"
+                                                id="{{question.opt2}} {{question.question|truncatewords:3}}">
+                                            <label for="{{question.opt2}} {{question.question|truncatewords:3}}" class="cursor-pointer">{{question.opt2}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="w-full py-1.5">
+                                        <div class="option my-1">
+                                            <input type="radio" name="{{questiom_id}}" value="{{question.opt3}}"
+                                                id="{{question.opt3}} {{question.question|truncatewords:3}}">
+                                            <label for="{{question.opt3}} {{question.question|truncatewords:3}}" class="cursor-pointer">{{question.opt3}}</label>
+                                        </div>
+                                        <div class="option my-1">
+                                            <input type="radio" name="{{questiom_id}}" value="{{question.opt4}}"
+                                                id="{{question.opt4}} {{question.question|truncatewords:3}}">
+                                            <label for="{{question.opt4}} {{question.question|truncatewords:3}}" class="cursor-pointer">{{question.opt4}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="pt-4 flex items-center space-x-4">
+                            <button type="submit" class="btn-2 w-full">
+                                Submit Exam
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script>
+    let examTime = {{ exam_time }} * 60; //in sec
+    const timer = document.getElementById("timer");
+    const countDown = setInterval(function () {
+        examTime--;
+
+        let hours = Math.floor(examTime / 3600);
+        let minutes = Math.floor((examTime - (hours * 3600)) / 60);
+        let seconds = examTime - (hours * 3600) - (minutes * 60);
+
+        hours = (hours < 10) ? "0" + hours : hours;
+        minutes = (minutes < 10) ? "0" + minutes : minutes;
+        seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+        timer.innerHTML = hours + ":" + minutes + ":" + seconds;
+
+        if (examTime < 60) {
+            timer.style.color = "#ff0000"
+            if (examTime === 0) {
+                clearInterval(countDown);
+                timer.innerHTML = "EXAM OVER";
+                alert("EXAM TIME OVER");
+                document.getElementById("exam-form").submit();
+            }
+        }
+    }, 1000);
+</script>
+{% endblock body %}

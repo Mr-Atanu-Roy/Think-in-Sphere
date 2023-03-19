@@ -35,13 +35,22 @@
         {% else %}
 
         {% for key, value in result.items %}
-        <a href="/course/view/topic/{{key|lower}} in {{course}}"
-            class="m-7 flex-col items-center justify-center text-center rounded-lg border-4 border-dashed p-7 w-72 h-72">
+        <div class="m-7 flex-col items-center justify-center text-center rounded-lg border-4 border-dashed p-4 w-72 h-96">
             <div class="text-center flex items-center justify-center">
                 <img class="object-center w-40" src="/static/images/icons/read.png" alt="{{value|lower}}">
             </div>
-            <p class="pointer-none text-gray-600 f-medium mt-6 text-center capitalize">{{value|title}}</p>
-        </a>
+            <div>
+                <p class="pointer-none text-gray-600 f-medium mt-6 text-center capitalize">{{value|title}}</p>
+                <div class="flex-col items-center justify-between">
+                    <button class="pt-4 pb-6">
+                        <a href="/course/view/topic/{{key|lower}} in {{course}}" class="topic-btn-1">Explore More</a>
+                    </button>
+                    <button>
+                        <a href="/exam/create/{{key|lower}} in {{course}}" class="topic-btn-1">Give a Exam</a>
+                    </button>
+                </div>
+            </div>
+        </div>
         {% endfor %}
 
         {% endif %}

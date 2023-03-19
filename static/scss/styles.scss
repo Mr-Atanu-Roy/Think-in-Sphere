@@ -131,6 +131,12 @@ header {
   }
 }
 
+.topic-btn-1{
+  @extend .btn-1;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
 form {
   input {
     background: none;

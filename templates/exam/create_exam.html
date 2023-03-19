@@ -1,0 +1,147 @@
+{% extends '../blocks/base.html' %}
+
+{% block title %}Create Exam | {{topic | title}}{% endblock title %}
+
+
+{% block body %}
+
+<section id="create-exam">
+
+    <div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
+        <div class="relative py-3 sm:max-w-4xl sm:mx-auto">
+            <div class="relative px-4 py-10 bg-white mx-8 md:mx-0 shadow-lg rounded-2xl sm:p-10">
+                <div class="max-w-md mx-auto">
+                    <div class="flex items-center space-x-5">
+                        <div
+                            class="h-14 w-14 bg-yellow-200 rounded-full flex flex-shrink-0 justify-center items-center text-yellow-600 text-2xl font-mono">
+                            <i class="fa fa-hourglass-start"></i>
+                        </div>
+                        <div class="block pl-2 text-xl self-start text-gray-700">
+                            <h2 class="leading-relaxed f-medium text-2xl">Create Exam</h2>
+                            <h2 class="leading-relaxed f-light text-lg">to check your preparation</h2>
+                        </div>
+                    </div>
+                    <form method="post" action="" class="divide-y divide-gray-200 f-light">
+                        {% csrf_token %}
+
+                        {% if messages %}
+
+                        {% for message in messages %}
+                        <div class="{% if message.tags %}{{message.tags}}{% endif %} px-4 py-3 my-3 rounded relative"
+                            role="alert">
+                            <strong class="font-bold"><i class="fa fa-exclamation-triangle"></i></strong>
+                            <span class="block sm:inline">{{message}}</span>
+                        </div>
+                        {% endfor %}
+
+                        {% endif %}
+                        <div class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
+
+                            <div class="grid grid-cols-2 gap-6">
+                                <div class="flex flex-col">
+                                    <label class="leading-loose">User</label>
+                                    <input type="text"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none cursor-not-allowed disabled:opacity-60"
+                                        placeholder="username" value="{{user_fname}}" disabled>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="leading-loose">Exam Name</label>
+                                    <input type="text"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none"
+                                        placeholder="Give a name for exam" name="exam_name" value="{{exam_name}}">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-6">
+                                <div class="flex flex-col">
+                                    <label class="leading-loose">Topic</label>
+                                    <input type="text"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none cursor-not-allowed disabled:opacity-60"
+                                        placeholder="exam topic" name="topic" value="{{topic | title}}" disabled>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="leading-loose">Number of Questions-<span
+                                            id="no_questions-slider-val">15</span></label>
+                                    <input type="range" min="6" max="20"
+                                        class="mt-3.5 transparent h-1.5 w-full cursor-pointer appearance-none rounded-lg border-transparent bg-neutral-200"
+                                        id="no_questions" name="no_questions" placeholder="Number of questions"
+                                        value="{{no_questions}}">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-6">
+                                <div class="flex flex-col">
+                                    <label class="leading-loose">Exam Time (in minutes)</label>
+                                    <input type="text"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none cursor-not-allowed disabled:opacity-60"
+                                        id="exam_time" placeholder="exam time" name="exam_time" value="{{exam_time}}"
+                                        disabled>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="leading-loose">Total Marks</label>
+                                    <input type="text"
+                                        class="px-4 py-2 border focus:ring-gray-500 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none cursor-not-allowed disabled:opacity-60"
+                                        id="exam_marks" placeholder="exam marks" name="exam_marks"
+                                        value="{{exam_marks}}" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-4 flex items-center space-x-4">
+                            <button type="submit" class="btn-2 w-full">
+                                Start Exam
+                            </button>
+                        </div>
+                    </form>
+                    <div class="mb-4 rounded-lg bg-red-100 py-5 px-6 text-base text-red-700 mt-6" role="alert"> 
+                        <strong class="f-medium">
+                            INSTRUCTIONS
+                        </strong>
+                        <ol class="f-light text-sm">
+                            <li>
+                                Identify the platform and tools to be used for the exam and ensure that all students
+                                have access to them before the exam date.
+                            </li>
+                            <li>
+                                Establish clear guidelines for the exam format, such as the duration of the exam, number
+                            of
+                            questions, and whether it will be open book or closed book.
+                            </li>
+
+                            <li>
+                                Clearly communicate the exam rules to all students in advance, including guidelines on
+                            how to
+                            submit answers, time limits, and any restrictions on outside resources.
+                            </li>
+
+                            <li>
+                                Randomize the order of questions and answer choices to prevent sharing of answers.
+
+                            </li>
+                            
+                            <li>
+                                Use plagiarism detection software to ensure that students do not copy from other
+                            sources.
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    var slider = document.getElementById("no_questions");
+    var output = document.getElementById("no_questions-slider-val");
+    output.innerHTML = slider.value;
+
+    var exam_marks = document.getElementById("exam_marks");
+    var exam_time = document.getElementById("exam_time");
+    exam_marks.value = (slider.value) * 1;
+    exam_time.value = (slider.value) * 1.5;
+
+    slider.oninput = function () {
+        output.innerHTML = this.value;
+        exam_marks.value = (this.value) * 1;
+        exam_time.value = (this.value) * 1.5;
+    }
+</script>
+{% endblock body %}
