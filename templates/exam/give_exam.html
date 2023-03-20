@@ -34,7 +34,7 @@
                     <form action="" method="post" id="exam-form">
                         {% csrf_token %}
                         <div>
-                            {% for questiom_id, question in questions.items %}
+                            {% for question_id, question in questions.items %}
                             <div class="py-2.5">
                                 <div class="question-box">
                                     <p class="f-medium py-2">{{ forloop.counter }}.  {{question.question}}</p>
@@ -42,24 +42,24 @@
                                 <div class="options-box f-light grid grid-cols-2 gap4 capitalize">
                                     <div class="w-full py-1.5">
                                         <div class="option my-1">
-                                            <input type="radio" name="{{questiom_id}}" value="{{question.opt1}}"
+                                            <input type="radio" name="{{question_id}}" value="{{question.opt1}}"
                                                 id="{{question.opt1}} {{question.question|truncatewords:3}}">
                                             <label for="{{question.opt1}} {{question.question|truncatewords:3}}" class="cursor-pointer">{{question.opt1}}</label>
                                         </div>
                                         <div class="option my-1">
-                                            <input type="radio" name="{{questiom_id}}" value="{{question.opt2}}"
+                                            <input type="radio" name="{{question_id}}" value="{{question.opt2}}"
                                                 id="{{question.opt2}} {{question.question|truncatewords:3}}">
                                             <label for="{{question.opt2}} {{question.question|truncatewords:3}}" class="cursor-pointer">{{question.opt2}}</label>
                                         </div>
                                     </div>
                                     <div class="w-full py-1.5">
                                         <div class="option my-1">
-                                            <input type="radio" name="{{questiom_id}}" value="{{question.opt3}}"
+                                            <input type="radio" name="{{question_id}}" value="{{question.opt3}}"
                                                 id="{{question.opt3}} {{question.question|truncatewords:3}}">
                                             <label for="{{question.opt3}} {{question.question|truncatewords:3}}" class="cursor-pointer">{{question.opt3}}</label>
                                         </div>
                                         <div class="option my-1">
-                                            <input type="radio" name="{{questiom_id}}" value="{{question.opt4}}"
+                                            <input type="radio" name="{{question_id}}" value="{{question.opt4}}"
                                                 id="{{question.opt4}} {{question.question|truncatewords:3}}">
                                             <label for="{{question.opt4}} {{question.question|truncatewords:3}}" class="cursor-pointer">{{question.opt4}}</label>
                                         </div>
@@ -80,6 +80,9 @@
     </div>
 
 </section>
+
+
+{% include '../blocks/dismisable-alert.html' %}
 
 <script>
     let examTime = {{ exam_time }} * 60; //in sec

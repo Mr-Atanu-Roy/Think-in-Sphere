@@ -1,15 +1,140 @@
 {% extends '../blocks/base.html' %}
 
-{% block title %}Exam Result| {{exam_name | title}}{% endblock title %}
+{% block title %}Exam Result {% if get_exam != "" %}| {{get_exam.exam_name | title}} {% endif %}{% endblock title %}
 
 
 {% block body %}
 
 <section id="exam-result">
 
-    <div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-      
+    {% if get_exam != "" %}
+
+
+    <div class="min-h-screen bg-gray-100 flex flex-col justify-center">
+        <div class="py-6 px-3 md:py-12 md:mx-12 pt-16 h-full">
+            <div class="rounded-xl p-5 md:p-10 shadow-lg bg-white">
+                <div id="alert-box"
+                    class="mb-6 text-center bg-green-100 border-green-400 text-green-700 border px-4 py-3 rounded-lg w-full"
+                    role="alert">
+                    <strong class="capitalize block sm:inline"><i class="fa fa-exclamation-triangle"></i>
+                        Your Result</strong>
+                    <span class="absolute top-0 bottom-0 right-0 px-4 py-3" id="closeAlertBtn">
+                        <svg class="fill-current h-6 w-6 bg-green-100 border-green-400 text-green-700" role="button"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <title>Close</title>
+                            <path
+                                d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                        </svg>
+                    </span>
+                </div>
+                <div id="header-box" class="grid grid-cols-3 gap-6 f-medium">
+                    <div class="col-span-2">
+                        <div class="my-2">
+                            <strong class="capitalize">Exam Name - {{get_exam.exam_name}}</strong>
+                        </div>
+                        <div class="my-2">
+                            <strong class="capitalize">Exam Topic - {{get_exam.exam_topic}}</strong>
+                        </div>
+                        <div class="my-2">
+                            <strong class="capitalize">Exam Time - {{get_exam.exam_time}} Minutes</strong>
+                        </div>
+                        <div class="my-2">
+                            <strong class="capitalize">Exam Marks - {{get_exam.exam_marks}}</strong>
+                        </div>
+                        <div class="my-2">
+                            <strong class="capitalize">Your Marks - {{get_exam.user_marks}}</strong>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="progress-pie-chart" data-percent="{{user_percent}}">
+                            <div class="ppc-progress">
+                                <div class="ppc-progress-fill"></div>
+                            </div>
+                            <div class="ppc-percents">
+                                <div class="pcc-percents-wrapper">
+                                    <span class="{% if user_percent < 35 %}text-red-600{% else %}text-green-600{% endif %}">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-10">
+                <div id="question-box">
+                    <div id="alert-box"
+                        class="mb-6 text-center bg-green-100 border-green-400 text-green-700 border px-4 py-3 rounded-lg w-full"
+                        role="alert">
+                        <strong class="capitalize block sm:inline"><i class="fa fa-exclamation-triangle"></i>
+                            Check Questions</strong>
+                        <span class="absolute top-0 bottom-0 right-0 px-4 py-3" id="closeAlertBtn">
+                            <svg class="fill-current h-6 w-6 bg-green-100 border-green-400 text-green-700" role="button"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <title>Close</title>
+                                <path
+                                    d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+                            </svg>
+                        </span>
+                    </div>
+                    <div>
+                        <div>
+                            {% for question in get_questions %}
+                            <div class="py-2.5">
+                                <div class="question-box">
+                                    <p class="f-medium py-2">{{ forloop.counter }}. {{question.question}}</p>
+                                </div>
+                                <div class="question-box py-2.5">
+                                    <p class="f-medium"><span class="text-green-600">Correct Answer</span> :
+                                        {{question.correct_answer}}</p>
+                                    <p class="f-medium"><span
+                                            class="{% if question.correct_answer == question.user_answer %}text-green-600{% else %}text-red-600{% endif %}">Your
+                                            Answer</span> : {{question.user_answer}}</p>
+                                </div>
+                                <div class="options-box f-light grid grid-cols-2 gap4 capitalize">
+                                    <div class="w-full py-1.5">
+                                        <div class="option my-1">
+                                            <label>A. {{question.opt1}}</label>
+                                        </div>
+                                        <div class="option my-1">
+                                            <label>B. {{question.opt2}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="w-full py-1.5">
+                                        <div class="option my-1">
+                                            <label>C. {{question.opt3}}</label>
+                                        </div>
+                                        <div class="option my-1">
+                                            <label>D. {{question.opt4}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    {% endif %}
+
 </section>
+
+
+
+{% include '../blocks/dismisable-alert.html' %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var $ppc = $('.progress-pie-chart'),
+            percent = parseInt($ppc.data('percent')),
+            deg = 360 * percent / 100;
+        if (percent > 50) {
+            $ppc.addClass('gt-50');
+        }
+        $('.ppc-progress-fill').css('transform', 'rotate(' + deg + 'deg)');
+        $('.ppc-percents span').html(percent + '%');
+    });
+</script>
 
 {% endblock body %}

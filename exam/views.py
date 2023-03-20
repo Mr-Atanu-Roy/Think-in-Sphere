@@ -72,13 +72,17 @@ def giveExam(request, exam_id):
         
         if request.method == "POST":
             for result in request.POST:
-                try:
-                    get_question = ObjectiveExamQuestions.objects.get(question_id=result)
-                    get_question.user_answer = request.POST.get(result)
-                    get_question.save()
-                    return redirect(f'exam/result/{exam_id}')
-                except Exception as e:
-                    print(e)                
+                if result.lower() != "csrfmiddlewaretoken":
+                    try:
+                        get_question = ObjectiveExamQuestions.objects.get(question_id=result)
+                        get_question.user_answer = request.POST.get(result)
+                        get_question.save()
+                        if (get_question.correct_answer).lower() == (request.POST.get(result)).lower():
+                            getExam.user_marks += 1
+                            getExam.save()
+                        return redirect(f'/exam/result/{exam_id}')
+                    except Exception as e:
+                        print(e)                
         
         # check_question = ObjectiveExamQuestions.objects.filter(exam=getExam)
         
@@ -162,9 +166,24 @@ def giveExam(request, exam_id):
 @login_required(login_url="/auth/login")
 def examResult(request, exam_id):
     context = {}
+    getExam = getQuestions = ""
+    user_percent = 0
+    
+    try:
+        getExam = ExamDetails.objects.get(exam_id=exam_id)
+        user_percent = (getExam.user_marks/getExam.exam_marks)*100
+        if getExam:
+            getQuestions = ObjectiveExamQuestions.objects.filter(exam=getExam)
+        
+    except Exception as e:
+        messages.error(request, "Something went wrong")
+        print(e)
+        
 
-
-
+    context["get_exam"] = getExam
+    context["get_questions"] = getQuestions
+    context["user_percent"] = round(user_percent, 2)
+    
     return render(request, './exam/exam_result.html', context)
 
 
