@@ -69,7 +69,7 @@ def createRoom(request):
 
 @login_required(login_url="/auth/login")
 def chat(request, room_id):
-    query = result = imgResult = ""
+    message = query = result = imgResult = ""
     lang_code = "en"
     context = {
         "query" : query,
