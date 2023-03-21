@@ -27,7 +27,7 @@
                         </svg>
                     </span>
                 </div>
-                <div id="header-box" class="grid grid-cols-3 gap-6 f-medium">
+                <div id="header-box" class="grid grid-cols-3 gap-6 f-medium px-7">
                     <div class="col-span-2">
                         <div class="my-2">
                             <strong class="capitalize">Exam Name - {{get_exam.exam_name}}</strong>
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div>
-                        <div class="progress-pie-chart" data-percent="{{user_percent}}">
+                        <div class="progress-pie-chart ml-auto" data-percent="{{user_percent}}">
                             <div class="ppc-progress">
                                 <div class="ppc-progress-fill"></div>
                             </div>
@@ -74,7 +74,7 @@
                             </svg>
                         </span>
                     </div>
-                    <div>
+                    <div class="px-7">
                         <div>
                             {% for question in get_questions %}
                             <div class="py-2.5">
