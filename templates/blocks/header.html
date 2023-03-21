@@ -1,9 +1,9 @@
-<header class="flex items-center justify-between py-1 px-14 z-30">
+<header class="flex items-center justify-between py-1.5 px-3 lg:px-8 xl:px-12 z-30">
     <div>
         <a href="/"><img src="/static/images/Logo.png" alt="ThinkInSphere" class="w-20"></a>
     </div>
 
-    <div>
+    <div class="hidden lg:flex">
         <ul class="flex items-center justify-center text-xl">
             <li><a href="{% url 'home' %}" class="nav-links mx-3">Home</a></li>
             {% if user.is_authenticated %}
@@ -17,7 +17,7 @@
         </ul>
     </div>
 
-    <div class="flex items-center justify-center">
+    <div class="hidden items-center justify-center lg:flex">
         {% if user.is_authenticated %}
         <div>
             <a href="{% url 'logout' %}" class="nav-links text-xl mr-5 f-medium">LogOut</a>
@@ -33,7 +33,28 @@
             <a href="{% url 'chat-rooms' %}" class="btn-1 text-xl">ChatBot</a>
         </div>
         {% endif %}
-        
+    </div>
+
+    <div id="menu-btn" class="cursor-pointer lg:hidden" onclick="hide()">
+        <i class="fa fa-bars text-4xl"></i>
+    </div>
+
+    <div class="fixed top-0 h-screen w-2/5 bg-white py-12 px-8 flex items-center justify-center transition-all duration-300 lg:hidden"
+        style="z-index: 5600000; left: -550px;" id="mobile-nav">
+        <ul class="text-2xl">
+            <li class="py-4"><a href="{% url 'home' %}" class="nav-links mx-3 text-black">Home</a></li>
+            {% if user.is_authenticated %}
+            <li class="py-4"><a href="{% url 'dashboard' %}" class="nav-links mx-3 text-black">Dashboard</a></li>
+            <li class="py-4"><a href="{% url 'chat-rooms' %}" class="nav-links mx-3 text-black">My Rooms</a></li>
+            <li class="py-4"><a href="{{last_room_url}}" class="nav-links mx-3 text-black">Start Learning</a></li>
+            {% else %}
+            <li class="py-4"><a href="{% url 'chat-rooms' %}" class="nav-links mx-3 text-black">Start Learning</a></li>
+            {% endif %}
+            <li class="py-4"><a href="{% url 'course' %}" class="nav-links mx-3 text-black">Courses</a></li>
+            {% if user.is_authenticated %}
+            <li class="py-4"><a href="{% url 'logout' %}" class="nav-links mx-3 text-black">LogOut</a></li>
+            {% endif %}
+        </ul>
     </div>
 
 </header>
