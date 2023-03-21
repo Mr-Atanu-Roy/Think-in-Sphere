@@ -163,7 +163,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-box mb-8">
+                    <div class="accordion-box my-3">
                         <button class="accordion">You looked up for {{course_searchHistoryCount}} courses and
                             {{topic_searchHistoryCount}} topics in last
                             7 days <span class="f-light text-sm">(click to expand)</span></button>
@@ -198,6 +198,29 @@
                                         style="background-color: #97c680;">{{item.count}}</div>
                                     <span>{{item.request}}</span>
                                 </div>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-box mb-8">
+                        <button class="accordion">You gave {{examHistoryCount}} exams since last
+                            7 days <span class="f-light text-sm">(click to expand)</span></button>
+
+                        <div class="panel">
+                            <p class="f-light mb-2 text-gray-600 capitalize">exams you gave</p>
+                            <div class="flex items-center justify-start flex-wrap">
+                                {% if examHistoryCount == 0 %}
+                                <div class="text-sm p-1.5 mr-1.5 mb-2 text-red-600">You have not given any exam from
+                                    {{last_week | date}}
+                                </div>
+                                {% else %}
+                                {% for item in examHistory %}
+                                <a href="/exam/result/{{item.exam_id}}" class="text-sm p-2 mr-1.5 mb-2 bg-red-100 flex items-center justify-center">
+                                    <div class="w-5 h-5 f-medium text-xs rounded-full flex items-center justify-center mr-1"
+                                        style="background-color: #97c680;">{{item.count}}</div>
+                                    <span>{{item.exam_topic | truncatewords:6}}</span>
+                                </a>
                                 {% endfor %}
                                 {% endif %}
                             </div>

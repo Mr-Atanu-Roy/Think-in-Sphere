@@ -13,6 +13,7 @@ from core.models import UserRequestHistory
 from course.models import UserCourseHistory
 from accounts.models import User, OTP, UserProfile
 from core.models import UserRequestHistory
+from exam.models import ExamDetails
 from django.db.models import Count
 
 from accounts.utils import current_time, check_recaptcha, check_str_special
@@ -147,8 +148,8 @@ def login(request):
 @login_required(login_url="/auth/login")
 def dashboard(request):
     fname = lname = dob = country = city = course = institute = ""
-    searchHistory = course_searchHistory = topic_searchHistory = ""
-    searchHistoryCount = course_searchHistoryCount = topic_searchHistoryCount = topicHistoryCount = courseHistoryCount = 0
+    searchHistory = course_searchHistory = topic_searchHistory = examHistory = ""
+    searchHistoryCount = course_searchHistoryCount = topic_searchHistoryCount = topicHistoryCount = courseHistoryCount = examHistoryCount = 0
     last_week = current_time - datetime.timedelta(days=7)
     context = {
         'fname': fname,
@@ -170,6 +171,10 @@ def dashboard(request):
         course = getProfile.course_name
         institute = getProfile.institute_name
         language = getProfile.language
+        
+        '''Get user's exam data for last week'''
+        examHistory = ExamDetails.objects.filter(created_at__gte=last_week, user=request.user).values('exam_topic', 'exam_id').annotate(count=Count('exam_topic'))
+        examHistoryCount = examHistory.count()
         
         '''Get user's data for statistics for last week'''
         #getting chatbot search
@@ -298,6 +303,9 @@ def dashboard(request):
     
     context["courseHistoryCount"] = courseHistoryCount
     context["topicHistoryCount"] = topicHistoryCount
+    
+    context["examHistory"] = examHistory
+    context["examHistoryCount"] = examHistoryCount
     
         
     return render(request, './accounts/dashboard.html', context)

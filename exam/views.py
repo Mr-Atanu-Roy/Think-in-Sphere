@@ -3,8 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .models import ExamDetails, ObjectiveExamQuestions
+from accounts.models import UserProfile
 
-from core.utils import openai_general_endpoint
+from core.utils import openai_general_endpoint, detect_language, translate_text
 
 import random, uuid
 
@@ -58,7 +59,17 @@ def createExam(request, topic):
 def giveExam(request, exam_id):
     context = {}
     questions_dict = {}
+    lang_code = 'en'
     try:
+        try:
+            getProfile = UserProfile.objects.get(user=request.user)
+            lang_code = getProfile.language
+        except ExamDetails.DoesNotExist:
+            messages.warning("Invalid User")
+            return redirect('home')
+        except Exception as e:
+            print(e)
+            
         try:
             getExam = ExamDetails.objects.get(exam_id=exam_id)
             exam_topic = getExam.exam_topic
@@ -71,39 +82,22 @@ def giveExam(request, exam_id):
         
         
         if request.method == "POST":
-            for result in request.POST:
-                if result.lower() != "csrfmiddlewaretoken":
-                    try:
-                        get_question = ObjectiveExamQuestions.objects.get(question_id=result)
-                        get_question.user_answer = request.POST.get(result)
-                        get_question.save()
-                        if (get_question.correct_answer).lower() == (request.POST.get(result)).lower():
-                            getExam.user_marks += 1
-                            getExam.save()
-                        return redirect(f'/exam/result/{exam_id}')
-                    except Exception as e:
-                        print(e)                
+            for key in request.POST:
+                if key.lower() != "csrfmiddlewaretoken":
+                    if lang_code != "en":
+                        result, err = translate_text(request.POST.get(key), lang_code, 'en')
+                        if err == None:
+                            try:
+                                get_question = ObjectiveExamQuestions.objects.get(question_id=key)
+                                get_question.user_answer = result.lower()
+                                get_question.save()
+                                if (get_question.correct_answer).lower() == result.lower():
+                                    getExam.user_marks += 1
+                                    getExam.save()
+                                return redirect(f'/exam/result/{exam_id}')
+                            except Exception as e:
+                                print(e)                
         
-        # check_question = ObjectiveExamQuestions.objects.filter(exam=getExam)
-        
-        # if len(check_question) > 0:
-        #     for question in check_question:
-        #         question_id = question.question_id
-        #         question = question.question
-        #         opt1 = question.opt1
-        #         opt2 = question.opt2
-        #         opt3 = question.opt3
-        #         opt4 = question.opt4
-                
-        #         questions_dict[question_id] = {
-        #             "question" : question,
-        #             # "opt1" : opt1,
-        #             # "opt2" : opt2,
-        #             # "opt3" : opt3,
-        #             # "opt4" : opt4,
-        #         }
-                
-        # else:
         if cache.get(f"exam-{exam_id}"):
             questions_dict = cache.get(f"exam-{exam_id}")
         else:
@@ -134,8 +128,30 @@ def giveExam(request, exam_id):
                 
                 question_id = str(uuid.uuid4())
                 
+                if lang_code != "en":
+                    translated_question, err1 = translate_text(question, 'en', lang_code)
+                    if err1 == None:
+                        question = translated_question
+                        
+                    translated_opt1, err2 = translate_text(opt1, 'en', lang_code)
+                    if err2 == None:
+                        opt1 = translated_opt1
+                        
+                    translated_opt2, err3 = translate_text(opt2, 'en', lang_code)
+                    if err3 == None:
+                        opt2 = translated_opt2
+                        
+                    translated_opt3, err4 = translate_text(opt3, 'en', lang_code)
+                    if err4 == None:
+                        opt3 = translated_opt3
+                        
+                    translated_opt4, err5 = translate_text(opt4, 'en', lang_code)
+                    if err5 == None:
+                        opt4 = translated_opt4
+                        
                 newQuestion = ObjectiveExamQuestions(exam=getExam, question_id=question_id, question=question, opt1=opt1, opt2=opt2, opt3=opt3, opt4=opt4, correct_answer = answer)
                 newQuestion.save()
+                
                 
                 questions_dict[question_id] = {
                     "question" : question,
