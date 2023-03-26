@@ -1,5 +1,4 @@
 import threading
-import os
 from io import BytesIO
 from gtts import gTTS
 from playsound import playsound
@@ -13,7 +12,7 @@ import uuid
 import openai
 
 # Load OPENAI API key from environment variable
-openai.api_key = os.environ.get("OPENAI_API_KEY")
+openai.api_key = "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"
 
 class Speak(threading.Thread):
     

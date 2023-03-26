@@ -4,7 +4,7 @@ import openai
 import os
 
 # Load OPENAI API key from environment variable
-openai.api_key = os.environ.get("OPENAI_API_KEY")
+openai.api_key = "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"
 
 async def async_openai_general_endpoint(prompt, token=2045, temperature=0.7):
     response = openai.Completion.create(

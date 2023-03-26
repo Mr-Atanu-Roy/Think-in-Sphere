@@ -72,7 +72,7 @@ def check_recaptcha(view_func):
             if request.method == 'POST':
                 recaptcha_response = request.POST.get('g-recaptcha-response')
                 data = {
-                    'secret': os.environ.get('RECAPTCHA_PRIVATE_KEY'),
+                    'secret': "6LcettkkAAAAAMASfSo37zyFPBLpaVUKaPj7t5eV",
                     'response': recaptcha_response
                 }
                 r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
